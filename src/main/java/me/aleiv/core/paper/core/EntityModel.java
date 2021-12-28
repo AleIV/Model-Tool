@@ -35,9 +35,9 @@ public class EntityModel {
     @Getter private boolean dying;
 
     // External variables
-    private Entity entity;
-    private final ActiveModel activeModel;
-    private final ModeledEntity modeledEntity;
+    @Getter private Entity entity;
+    @Getter private final ActiveModel activeModel;
+    @Getter private final ModeledEntity modeledEntity;
 
     public EntityModel(UUID uuid, String name, Entity entity, ActiveModel activeModel, ModeledEntity modeledEntity, double maxHealth) {
         this.uuid = uuid;
