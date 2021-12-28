@@ -10,6 +10,7 @@ import me.aleiv.core.paper.models.EntityMood;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +24,9 @@ public class EntityModel {
      * Useless right now
      */
     @Getter private final String name;
+
+    @Getter private EntityType entityType;
+    @Getter private final EntityType originalEntityType;
 
     // Internal variables
     @Getter private double maxHealth;
@@ -42,6 +46,8 @@ public class EntityModel {
     public EntityModel(UUID uuid, String name, Entity entity, ActiveModel activeModel, ModeledEntity modeledEntity, double maxHealth) {
         this.uuid = uuid;
         this.name = name;
+        this.entityType = entity.getType();
+        this.originalEntityType = entity.getType();
         this.entity = entity;
         this.activeModel = activeModel;
         this.modeledEntity = modeledEntity;
