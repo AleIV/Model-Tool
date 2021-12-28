@@ -150,12 +150,13 @@ public class EntityModelManager implements Listener {
         }
     }*/
 
-    @EventHandler
+    // Not using this by now
+    /*@EventHandler
     public void onEntityMove(EntityMoveEvent e) {
         EntityModel entityModel = this.entityModelHashMap.get(e.getEntity().getUniqueId());
         if (entityModel != null) {
             Bukkit.getPluginManager().callEvent(new EntityModelMoveEvent(entityModel, e.getFrom(), e.getTo()));
         }
-    }
+    }*/
 
 }
