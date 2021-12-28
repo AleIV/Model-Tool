@@ -80,6 +80,7 @@ public class EntityModel {
         this.activeModel.addState("death", 0, 0, 1);
         Bukkit.getScheduler().scheduleSyncDelayedTask(ModelTool.getInstance(), () -> {
             this.forceKill();
+            // TODO: Add some die particles?
             Bukkit.getPluginManager().callEvent(new EntityModelDeathEvent(this, killer));
         }, frames);
     }
