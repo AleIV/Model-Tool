@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -89,6 +90,28 @@ public class EntityModel {
     public void forceKill() {
         this.entity.remove();
         this.activeModel.clearModel();
+    }
+
+    /**
+     * Makes the entity go to a location
+     *
+     * @param loc Location to go to. Must be on the same world
+     */
+    public void goTo(@NotNull Location loc) { // Maybe add a speed parameter or a boolean to make it go running
+        if (!loc.getWorld().getUID().equals(this.entity.getWorld().getUID())) return;
+
+        // TODO: Need to do NMS stuff
+    }
+
+    /**
+     * Makes the entity attack another entity
+     *
+     * @param target Entity to attack. Must be on same world.
+     */
+    public void attackEntity(@NotNull Entity target) {
+        if (!target.getWorld().getUID().equals(this.entity.getWorld().getUID())) return;
+
+        // TODO: Need to do NMS stuff
     }
 
 }
