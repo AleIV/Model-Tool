@@ -85,7 +85,7 @@ public class EntityModelManager implements Listener {
         modeledEntity.detectPlayers();
         modeledEntity.setInvisible(true);
 
-        EntityModel entityModel = new EntityModel(entity.getUniqueId(), name, entity, activeModel, modeledEntity, health);
+        EntityModel entityModel = new EntityModel(name, entity, activeModel, modeledEntity, health);
 
         this.entityModelHashMap.put(entity.getUniqueId(), entityModel);
 
