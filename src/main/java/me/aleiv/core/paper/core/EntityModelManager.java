@@ -5,6 +5,8 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import me.aleiv.core.paper.ModelTool;
+import me.aleiv.core.paper.events.EntityModelDamageEvent;
+import me.aleiv.core.paper.events.EntityModelMoveEvent;
 import me.aleiv.core.paper.events.EntityModelSpawnEvent;
 import me.aleiv.core.paper.exceptions.InvalidModelIdException;
 import org.bukkit.Bukkit;
@@ -119,6 +121,8 @@ public class EntityModelManager implements Listener {
             entityModel.setHealth(entityModel.getHealth() - e.getDamage());
             if (entityModel.getHealth() == 0) {
                 e.setCancelled(true); // Maybe the die animation is running
+            } else {
+                Bukkit.getPluginManager().callEvent(new EntityModelDamageEvent(entityModel, e instanceof EntityDamageByEntityEvent ? ((EntityDamageByEntityEvent) e).getDamager() : null, cause, e.getDamage()));
             }
         }
     }
@@ -136,7 +140,7 @@ public class EntityModelManager implements Listener {
     public void onEntityMove(EntityMoveEvent e) {
         EntityModel entityModel = this.entityModelHashMap.get(e.getEntity().getUniqueId());
         if (entityModel != null) {
-            entityModel.setLocation(e.getTo());
+            Bukkit.getPluginManager().callEvent(new EntityModelMoveEvent(entityModel, e.getFrom(), e.getTo()));
         }
     }
 
