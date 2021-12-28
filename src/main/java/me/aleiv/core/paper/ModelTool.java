@@ -1,5 +1,6 @@
 package me.aleiv.core.paper;
 
+import me.aleiv.core.paper.commands.ModelToolCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import co.aikar.commands.PaperCommandManager;
@@ -7,15 +8,12 @@ import kr.entree.spigradle.annotations.SpigotPlugin;
 import lombok.Getter;
 import me.aleiv.core.paper.utilities.NegativeSpaces;
 import me.aleiv.core.paper.utilities.TCT.BukkitTCT;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 
 @SpigotPlugin
 public class ModelTool extends JavaPlugin {
 
-    private static @Getter
-    ModelTool instance;
-    private @Getter PaperCommandManager commandManager;
-    private @Getter static MiniMessage miniMessage = MiniMessage.get();
+    @Getter private static ModelTool instance;
+    private PaperCommandManager commandManager;
 
     @Override
     public void onEnable() {
@@ -24,15 +22,17 @@ public class ModelTool extends JavaPlugin {
         BukkitTCT.registerPlugin(this);
         NegativeSpaces.registerCodes();
 
-        //COMMANDS
-        
-        commandManager = new PaperCommandManager(this);
-
+        this.registerCommands();
     }
 
     @Override
     public void onDisable() {
 
+    }
+
+    private void registerCommands() {
+        this.commandManager = new PaperCommandManager(this);
+        this.commandManager.registerCommand(new ModelToolCommand(this));
     }
 
 }
