@@ -5,6 +5,7 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import me.aleiv.core.paper.ModelTool;
+import me.aleiv.core.paper.events.EntityModelAttackEvent;
 import me.aleiv.core.paper.events.EntityModelDamageEvent;
 import me.aleiv.core.paper.events.EntityModelMoveEvent;
 import me.aleiv.core.paper.events.EntityModelSpawnEvent;
@@ -116,6 +117,8 @@ public class EntityModelManager implements Listener {
 
     private void causeDamage(EntityDamageEvent e, EventDamageCause cause) {
         Entity entity = e.getEntity();
+
+        // Detect if damaged
         EntityModel entityModel = this.entityModelHashMap.get(entity.getUniqueId());
 
         if (entityModel != null && entityModel.getHealth() != 0) {
@@ -125,7 +128,15 @@ public class EntityModelManager implements Listener {
                 entityModel.kill(entity);
             } else {
                 entityModel.setHealth(newHealth);
-                Bukkit.getPluginManager().callEvent(new EntityModelDamageEvent(entityModel, e instanceof EntityDamageByEntityEvent ? ((EntityDamageByEntityEvent) e).getDamager() : null, cause, e.getDamage()));
+                Bukkit.getPluginManager().callEvent(new EntityModelDamageEvent(entityModel, cause == EventDamageCause.ENTITY ? ((EntityDamageByEntityEvent) e).getDamager() : null, cause, e.getDamage()));
+            }
+        }
+
+        // Detect if entity attacked
+        if (cause == EventDamageCause.ENTITY) {
+            entityModel = this.entityModelHashMap.get(((EntityDamageByEntityEvent) e).getDamager().getUniqueId());
+            if (entityModel != null) {
+                Bukkit.getPluginManager().callEvent(new EntityModelAttackEvent(entityModel, entity));
             }
         }
     }
