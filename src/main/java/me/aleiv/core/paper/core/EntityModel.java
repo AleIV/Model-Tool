@@ -1,9 +1,13 @@
 package me.aleiv.core.paper.core;
 
+import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import lombok.Getter;
+import me.aleiv.core.paper.ModelTool;
+import me.aleiv.core.paper.events.EntityModelDeathEvent;
 import me.aleiv.core.paper.models.EntityMood;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -26,6 +30,8 @@ public class EntityModel {
      * Useless right now
      */
     @Getter private EntityMood mood;
+
+    @Getter private boolean dying;
 
     // External variables
     private Entity entity;
@@ -56,30 +62,33 @@ public class EntityModel {
         this.health = health >= this.maxHealth ? this.maxHealth : (health <= 0 ? 0 : health);
 
         if (this.health == 0) {
-            this.kill();
+            this.kill(null);
         }
     }
 
     /**
      * Will kill the model and the entity
+     *
+     * @param killer Entity that killed the mob. Can be null
      */
-    public void kill() {
-        this.kill(false);
+    public void kill(Entity killer) {
+        if (this.dying) return;
+        this.dying = true;
+        int frames = this.activeModel.getBlueprint().getAnimation("death").getLength(); // Every frame is a tick
+
+        this.activeModel.addState("death", 0, 0, 1);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(ModelTool.getInstance(), () -> {
+            this.forceKill();
+            Bukkit.getPluginManager().callEvent(new EntityModelDeathEvent(this, killer));
+        }, frames);
     }
 
     /**
-     * Will kill the model and the entity (can be revived)
-     *
-     * @param force If true, no animations will be played
+     * Will remove the entity without launching any event, or state
      */
-    public void kill(boolean force) {
-        // TODO: Test death animation if it kills the entity or should be done manually
-        // TODO: Fire death event
+    public void forceKill() {
+        this.entity.remove();
+        this.activeModel.clearModel();
     }
-
-    public boolean isPlayer() {
-        return this.entity instanceof Player;
-    }
-
 
 }
