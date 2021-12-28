@@ -5,15 +5,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import co.aikar.commands.PaperCommandManager;
 import kr.entree.spigradle.annotations.SpigotPlugin;
 import lombok.Getter;
-import me.aleiv.core.paper.commands.GlobalCMD;
 import me.aleiv.core.paper.utilities.NegativeSpaces;
 import me.aleiv.core.paper.utilities.TCT.BukkitTCT;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
 @SpigotPlugin
-public class Core extends JavaPlugin {
+public class ModelTool extends JavaPlugin {
 
-    private static @Getter Core instance;
+    private static @Getter
+    ModelTool instance;
     private @Getter PaperCommandManager commandManager;
     private @Getter static MiniMessage miniMessage = MiniMessage.get();
 
@@ -27,8 +27,6 @@ public class Core extends JavaPlugin {
         //COMMANDS
         
         commandManager = new PaperCommandManager(this);
-
-        commandManager.registerCommand(new GlobalCMD(this));
 
     }
 

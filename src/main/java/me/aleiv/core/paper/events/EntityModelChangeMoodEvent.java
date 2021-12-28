@@ -1,5 +1,7 @@
-package me.aleiv.core.paper.utilities.MT.events;
+package me.aleiv.core.paper.events;
 
 public class EntityModelChangeMoodEvent {
+
+    // TODO
     
 }
