@@ -117,11 +117,14 @@ public class EntityModelManager implements Listener {
     private void causeDamage(EntityDamageEvent e, EventDamageCause cause) {
         Entity entity = e.getEntity();
         EntityModel entityModel = this.entityModelHashMap.get(entity.getUniqueId());
-        if (entityModel != null) {
-            entityModel.setHealth(entityModel.getHealth() - e.getDamage());
-            if (entityModel.getHealth() == 0) {
-                e.setCancelled(true); // Maybe the die animation is running
+
+        if (entityModel != null && entityModel.getHealth() != 0) {
+            double newHealth = entityModel.getHealth() - e.getDamage();
+
+            if (newHealth <= 0) {
+                entityModel.kill(entity);
             } else {
+                entityModel.setHealth(newHealth);
                 Bukkit.getPluginManager().callEvent(new EntityModelDamageEvent(entityModel, e instanceof EntityDamageByEntityEvent ? ((EntityDamageByEntityEvent) e).getDamager() : null, cause, e.getDamage()));
             }
         }
