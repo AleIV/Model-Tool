@@ -84,4 +84,13 @@ artifacts {
     archives shadowJar
 }
 
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId = 'ModelTool'
+            from components.java
+        }
+    }
+}
+
 tasks.build.dependsOn tasks.shadowJar
