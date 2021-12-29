@@ -43,7 +43,7 @@ public class ModelToolCommand extends BaseCommand {
     }
 
     @Subcommand("spawn")
-    @CommandCompletion("@mobs @none @range:1-1000")
+    @CommandCompletion("@mobs @nothing @range:1-1000")
     public void onSpawn(Player player, EntityType entityType, String modelId, @Default("20") Integer health) {
         try {
             plugin.getEntityModelManager().spawnEntityModel(entityType.name() + String.valueOf(new Random().nextInt(999)), health, modelId, player.getLocation(), entityType, EntityMood.NEUTRAL);
@@ -64,5 +64,21 @@ public class ModelToolCommand extends BaseCommand {
         plugin.getEntityModelManager().undisguisePlayer(player);
     }
 
+    @Subcommand("kill")
+    @CommandCompletion("@entitymodels @bool:true=true,false=false")
+    public void onKill(CommandSender sender, EntityModel entityModel, @Optional @Default("true") Boolean force) {
+        if (entityModel.isDying()) {
+            sender.sendMessage("§cEl modelo ya se esta muriendo");
+            return;
+        }
+
+        if (force) {
+            entityModel.forceKill();
+        } else {
+            entityModel.kill(null);
+        }
+
+        sender.sendMessage("§aHas matado a " + entityModel.getName());
+    }
 
 }
