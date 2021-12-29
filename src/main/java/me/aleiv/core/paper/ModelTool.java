@@ -4,6 +4,9 @@ import co.aikar.commands.InvalidCommandArgument;
 import me.aleiv.core.paper.commands.ModelToolCommand;
 import me.aleiv.core.paper.core.EntityModel;
 import me.aleiv.core.paper.core.EntityModelManager;
+import me.aleiv.core.paper.listener.JoinQuitListener;
+import me.aleiv.core.paper.listener.MountUnmountListener;
+import me.aleiv.core.paper.listener.PlayerDieListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import co.aikar.commands.PaperCommandManager;
@@ -28,6 +31,7 @@ public class ModelTool extends JavaPlugin {
         NegativeSpaces.registerCodes();
 
         this.registerCommands();
+        this.registerListeners();
     }
 
     @Override
@@ -50,6 +54,12 @@ public class ModelTool extends JavaPlugin {
         });
 
         this.commandManager.registerCommand(new ModelToolCommand(this));
+    }
+
+    private void registerListeners() {
+        this.getServer().getPluginManager().registerEvents(new JoinQuitListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerDieListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new MountUnmountListener(this), this);
     }
 
 }
