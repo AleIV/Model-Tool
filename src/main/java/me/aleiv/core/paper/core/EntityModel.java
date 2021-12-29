@@ -91,7 +91,13 @@ public class EntityModel {
     public void kill(Entity killer) {
         if (this.dying) return;
         this.dying = true;
-        int frames = this.activeModel.getBlueprint().getAnimation("death").getLength(); // Every frame is a tick
+        Animation deathAnimation = this.getAnimation("death");
+        if (deathAnimation == null) {
+            this.forceKill();
+            return;
+        }
+
+        int frames = deathAnimation.getLength(); // Every frame is a tick
 
         this.activeModel.addState("death", 0, 0, 1);
         Bukkit.getScheduler().scheduleSyncDelayedTask(ModelTool.getInstance(), () -> {
