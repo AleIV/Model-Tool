@@ -1,6 +1,7 @@
 package me.aleiv.core.paper.core;
 
 import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.generator.blueprint.Animation;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import lombok.Getter;
@@ -9,7 +10,9 @@ import me.aleiv.core.paper.events.EntityModelChangeMoodEvent;
 import me.aleiv.core.paper.events.EntityModelDeathEvent;
 import me.aleiv.core.paper.events.EntityModelDisguiseEvent;
 import me.aleiv.core.paper.events.EntityModelUndisguiseEvent;
+import me.aleiv.core.paper.exceptions.InvalidAnimationException;
 import me.aleiv.core.paper.models.EntityMood;
+import me.aleiv.core.paper.utilities.TCT.BukkitTCT;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -219,7 +222,46 @@ public class EntityModel {
         UUID oldUUID = this.uuid;
         this.uuid = newUUID;
         ModelTool.getInstance().getEntityModelManager()._updateUUID(oldUUID, newUUID);
+    }
 
+    // Animations stuff
+
+    /**
+     * Gets an animation from the model
+     *
+     * @param animationName Name of the animation
+     * @return Animation, or null if not found or doesn't exist
+     */
+    public Animation getAnimation(String animationName) {
+        return this.activeModel.getBlueprint().getAnimation(animationName);
+    }
+
+    /**
+     * Checks if an animation exists for this model
+     *
+     * @param animationName Name of the animation
+     * @return True if the animation exists
+     */
+    public boolean doesAnimationExist(String animationName) {
+        return getAnimation(animationName) != null;
+    }
+
+    /**
+     * Plays an animation
+     *
+     * @param animationName Name of the animation
+     */
+    public void playAnimation(String animationName) throws InvalidAnimationException {
+        Animation animation = getAnimation(animationName);
+
+        if (animation == null) {
+            throw new InvalidAnimationException(this.activeModel.getModelId(), animationName);
+        }
+
+        this.activeModel.addState(animationName, 1, 1, 1);
+
+        // TODO: Use the TaskChainTool
+        Bukkit.getScheduler().scheduleSyncDelayedTask(ModelTool.getInstance(), () -> this.activeModel.removeState(animationName, false), animation.getLength());
     }
 
 }
