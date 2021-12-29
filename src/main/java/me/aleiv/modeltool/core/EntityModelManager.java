@@ -30,16 +30,13 @@ import java.util.UUID;
 
 public class EntityModelManager implements Listener {
 
-    private final JavaPlugin plugin;
-
     private final HashMap<UUID, EntityModel> entityModelHashMap;
 
     public EntityModelManager(JavaPlugin plugin) {
-        this.plugin = plugin;
         this.entityModelHashMap = new HashMap<>();
 
         // Registering Listeners
-        Bukkit.getPluginManager().registerEvents(this, this.plugin);
+        Bukkit.getPluginManager().registerEvents(this, plugin);
         Bukkit.getPluginManager().registerEvents(new JoinQuitListener(this), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerDieListener(this), plugin);
         Bukkit.getPluginManager().registerEvents(new MountUnmountListener(this), plugin);
