@@ -1,6 +1,7 @@
 package me.aleiv.core.paper;
 
 import me.aleiv.core.paper.commands.ModelToolCommand;
+import me.aleiv.core.paper.core.EntityModelManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import co.aikar.commands.PaperCommandManager;
@@ -14,6 +15,8 @@ public class ModelTool extends JavaPlugin {
 
     @Getter private static ModelTool instance;
     private PaperCommandManager commandManager;
+
+    @Getter private EntityModelManager entityModelManager;
 
     @Override
     public void onEnable() {
