@@ -44,7 +44,7 @@ public class EntityModel {
     @Getter private final ActiveModel activeModel;
     @Getter private ModeledEntity modeledEntity;
 
-    public EntityModel(String name, Entity entity, ActiveModel activeModel, ModeledEntity modeledEntity, double maxHealth) {
+    public EntityModel(String name, Entity entity, ActiveModel activeModel, ModeledEntity modeledEntity, double maxHealth, EntityMood mood) {
         this.uuid = entity.getUniqueId();
         this.name = name;
         this.entityType = entity.getType();
@@ -55,7 +55,7 @@ public class EntityModel {
 
         this.maxHealth = maxHealth;
         this.health = maxHealth;
-        this.mood = EntityMood.NEUTRAL; // TODO: know the mood of entity
+        this.mood = mood;
 
         this.dying = false;
         this.disguised = this.entityType != EntityType.PLAYER;
@@ -122,7 +122,7 @@ public class EntityModel {
     }
 
     /**
-     * Makes the entity attack another entity
+     * Makes the entity attack another entity. Will change mood to hostile
      *
      * @param target Entity to attack. Must be on same world.
      */
@@ -133,6 +133,22 @@ public class EntityModel {
         }
 
         if (!target.getWorld().getUID().equals(this.entity.getWorld().getUID())) return;
+        this.mood = EntityMood.HOSTILE;
+
+        // TODO: Need to do NMS stuff
+    }
+
+    /**
+     * Changes the entity's mood
+     *
+     * @param mood New mood
+     */
+    public void setMood(EntityMood mood) {
+        this.mood = mood;
+        if (disguised) {
+            this.entity.sendMessage("Mood changed to " + mood.name());
+            return;
+        }
 
         // TODO: Need to do NMS stuff
     }

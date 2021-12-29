@@ -10,6 +10,7 @@ import me.aleiv.core.paper.events.EntityModelDamageEvent;
 import me.aleiv.core.paper.events.EntityModelMoveEvent;
 import me.aleiv.core.paper.events.EntityModelSpawnEvent;
 import me.aleiv.core.paper.exceptions.InvalidModelIdException;
+import me.aleiv.core.paper.models.EntityMood;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -72,7 +73,7 @@ public class EntityModelManager implements Listener {
      * @return The spawned EntityModel
      * @throws InvalidModelIdException If the modelId is invalid or the model is not found
      */
-    public EntityModel spawnEntityModel(String name, double health, String modelId, Location loc, EntityType entityType) throws InvalidModelIdException {
+    public EntityModel spawnEntityModel(String name, double health, String modelId, Location loc, EntityType entityType, EntityMood entityMood) throws InvalidModelIdException {
         Entity entity = loc.getWorld().spawnEntity(loc, entityType);
 
         ModeledEntity modeledEntity = ModelEngineAPI.api.getModelManager().createModeledEntity(entity);
@@ -85,7 +86,7 @@ public class EntityModelManager implements Listener {
         modeledEntity.detectPlayers();
         modeledEntity.setInvisible(true);
 
-        EntityModel entityModel = new EntityModel(name, entity, activeModel, modeledEntity, health);
+        EntityModel entityModel = new EntityModel(name, entity, activeModel, modeledEntity, health, entityMood);
 
         this.entityModelHashMap.put(entity.getUniqueId(), entityModel);
 
