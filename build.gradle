@@ -78,12 +78,6 @@ shadowJar {
     minimize();
 }
 
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-    archives shadowJar
-}
-
 publishing {
     publications {
         maven(MavenPublication) {
@@ -91,6 +85,9 @@ publishing {
             group = rootProject.group
             artifactId = "ModelTool"
             version = rootProject.version
+            afterEvaluate {
+                artifact shadowJar
+            }
         }
     }
 }
