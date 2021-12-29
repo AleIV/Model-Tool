@@ -3,11 +3,9 @@ package me.aleiv.core.paper.core;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
-import io.papermc.paper.event.entity.EntityMoveEvent;
 import me.aleiv.core.paper.ModelTool;
 import me.aleiv.core.paper.events.EntityModelAttackEvent;
 import me.aleiv.core.paper.events.EntityModelDamageEvent;
-import me.aleiv.core.paper.events.EntityModelMoveEvent;
 import me.aleiv.core.paper.events.EntityModelSpawnEvent;
 import me.aleiv.core.paper.exceptions.InvalidModelIdException;
 import me.aleiv.core.paper.models.EntityMood;
@@ -15,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
@@ -27,12 +26,12 @@ import java.util.UUID;
 
 public class EntityModelManager implements Listener {
 
-    private final ModelTool modelTool;
+    private final ModelTool plugin;
 
     private HashMap<UUID, EntityModel> entityModelHashMap;
 
     public EntityModelManager(ModelTool modelTool) {
-        this.modelTool = modelTool;
+        this.plugin = modelTool;
         this.entityModelHashMap = new HashMap<>();
     }
 
@@ -104,6 +103,32 @@ public class EntityModelManager implements Listener {
         Bukkit.getPluginManager().callEvent(new EntityModelSpawnEvent(entityModel));
 
         return entityModel;
+    }
+
+    /**
+     * Alias of {@link EntityModel#disguise(Player)}
+     *
+     * @param player Player to disguise
+     * @param entityModel EntityModel to disguise to
+     */
+    public void disguisePlayer(Player player, EntityModel entityModel) {
+        entityModel.disguise(player);
+    }
+
+    /**
+     * Undisguise a player if it's in a model
+     *
+     * @param player Player to undisguise
+     */
+    public void undisguisePlayer(Player player) {
+        getEntityModels().stream()
+            .filter(em -> em.getEntity().getUniqueId().equals(player.getUniqueId()))
+            .findFirst().ifPresentOrElse(
+                em -> {
+                    em.undisguise();
+                    player.sendMessage("§6Ya no estas disfrazado de " + em.getName());
+                },
+                () -> player.sendMessage("§cNo estas en un modelo"));
     }
 
     public enum EventDamageCause {
