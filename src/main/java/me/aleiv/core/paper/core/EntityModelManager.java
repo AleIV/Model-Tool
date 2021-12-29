@@ -173,6 +173,7 @@ public class EntityModelManager implements Listener {
             if (newHealth <= 0) {
                 entityModel.kill(entity);
             } else {
+                e.setDamage(0);
                 entityModel.setHealth(newHealth);
                 Bukkit.getPluginManager().callEvent(new EntityModelDamageEvent(entityModel, cause == EventDamageCause.ENTITY ? ((EntityDamageByEntityEvent) e).getDamager() : null, cause, e.getDamage()));
             }
