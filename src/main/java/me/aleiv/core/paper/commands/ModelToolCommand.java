@@ -65,7 +65,7 @@ public class ModelToolCommand extends BaseCommand {
     }
 
     @Subcommand("kill")
-    @CommandCompletion("@entitymodels @bool:true=true,false=false")
+    @CommandCompletion("@entitymodels @bool")
     public void onKill(CommandSender sender, EntityModel entityModel, @Optional @Default("true") Boolean force) {
         if (entityModel.isDying()) {
             sender.sendMessage("§cEl modelo ya se esta muriendo");

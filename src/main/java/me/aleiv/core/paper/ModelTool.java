@@ -45,6 +45,7 @@ public class ModelTool extends JavaPlugin {
     private void registerCommands() {
         this.commandManager = new PaperCommandManager(this);
 
+        this.commandManager.getCommandCompletions().registerStaticCompletion("bool", new String[]{"true", "false"});
         this.commandManager.getCommandCompletions().registerAsyncCompletion("entitymodels", (ctx) -> this.entityModelManager.getEntityModels().stream().map(EntityModel::getName).collect(java.util.stream.Collectors.toList()));
         this.commandManager.getCommandCompletions().registerAsyncCompletion("entitymodelsuuid", (ctx) -> this.entityModelManager.getEntityModels().stream().map(em -> em.getUuid().toString()).collect(java.util.stream.Collectors.toList()));
         this.commandManager.getCommandContexts().registerContext(EntityModel.class, (ctx) -> {
