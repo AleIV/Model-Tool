@@ -7,6 +7,8 @@ import lombok.Getter;
 import me.aleiv.core.paper.ModelTool;
 import me.aleiv.core.paper.events.EntityModelChangeMoodEvent;
 import me.aleiv.core.paper.events.EntityModelDeathEvent;
+import me.aleiv.core.paper.events.EntityModelDisguiseEvent;
+import me.aleiv.core.paper.events.EntityModelUndisguiseEvent;
 import me.aleiv.core.paper.models.EntityMood;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -177,10 +179,13 @@ public class EntityModel {
 
         this.entity.remove();
         this.entity = player;
+
+        Bukkit.getPluginManager().callEvent(new EntityModelDisguiseEvent(this, player));
     }
 
     public void undisguise() {
         if (!this.disguised) return;
+        Player player = (Player) this.entity;
 
         Entity entity = this.entity.getWorld().spawnEntity(this.entity.getLocation(), this.originalEntityType);
         ModeledEntity modeledEntity = ModelEngineAPI.api.getModelManager().getModeledEntity(this.entity.getUniqueId());
@@ -192,6 +197,8 @@ public class EntityModel {
         this.entity = entity;
         this.disguised = false;
         this.entityType = this.originalEntityType;
+
+        Bukkit.getPluginManager().callEvent(new EntityModelUndisguiseEvent(this, player));
     }
 
 }
