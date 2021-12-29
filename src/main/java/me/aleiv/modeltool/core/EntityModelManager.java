@@ -8,6 +8,9 @@ import me.aleiv.modeltool.events.EntityModelDamageEvent;
 import me.aleiv.modeltool.events.EntityModelSpawnEvent;
 import me.aleiv.modeltool.exceptions.InvalidAnimationException;
 import me.aleiv.modeltool.exceptions.InvalidModelIdException;
+import me.aleiv.modeltool.listener.JoinQuitListener;
+import me.aleiv.modeltool.listener.MountUnmountListener;
+import me.aleiv.modeltool.listener.PlayerDieListener;
 import me.aleiv.modeltool.models.EntityMood;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -34,13 +37,12 @@ public class EntityModelManager implements Listener {
     public EntityModelManager(JavaPlugin plugin) {
         this.plugin = plugin;
         this.entityModelHashMap = new HashMap<>();
-    }
 
-    /**
-     * Registers itself as a listener
-     */
-    public void registerListener() {
+        // Registering Listeners
         Bukkit.getPluginManager().registerEvents(this, this.plugin);
+        Bukkit.getPluginManager().registerEvents(new JoinQuitListener(this), plugin);
+        Bukkit.getPluginManager().registerEvents(new PlayerDieListener(this), plugin);
+        Bukkit.getPluginManager().registerEvents(new MountUnmountListener(this), plugin);
     }
 
     /**

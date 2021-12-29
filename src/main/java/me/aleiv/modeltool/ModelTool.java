@@ -32,10 +32,8 @@ public class ModelTool extends JavaPlugin {
         NegativeSpaces.registerCodes();
 
         this.entityModelManager = new EntityModelManager(this);
-        this.entityModelManager.registerListener();
 
         this.registerCommands();
-        this.registerListeners();
     }
 
     @Override
@@ -60,12 +58,6 @@ public class ModelTool extends JavaPlugin {
         });
 
         this.commandManager.registerCommand(new ModelToolCommand(this));
-    }
-
-    private void registerListeners() {
-        this.getServer().getPluginManager().registerEvents(new JoinQuitListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerDieListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new MountUnmountListener(this), this);
     }
 
 }

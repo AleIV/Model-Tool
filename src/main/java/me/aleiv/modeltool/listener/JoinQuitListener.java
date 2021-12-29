@@ -2,6 +2,7 @@ package me.aleiv.modeltool.listener;
 
 import me.aleiv.modeltool.ModelTool;
 import me.aleiv.modeltool.core.EntityModel;
+import me.aleiv.modeltool.core.EntityModelManager;
 import me.aleiv.modeltool.events.EntityModelForceDeathEvent;
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
@@ -14,19 +15,19 @@ import java.util.UUID;
 
 public class JoinQuitListener implements Listener {
 
-    private final ModelTool plugin;
+    private final EntityModelManager manager;
     private HashMap<UUID, EntityModel> playerCache;
     private HashMap<UUID, GameMode> gamemodeCache;
 
-    public JoinQuitListener(ModelTool plugin) {
-        this.plugin = plugin;
+    public JoinQuitListener(EntityModelManager manager) {
+        this.manager = manager;
         this.playerCache = new HashMap<>();
         this.gamemodeCache = new HashMap<>();
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-        EntityModel entityModel = this.plugin.getEntityModelManager().getEntityModel(e.getPlayer().getUniqueId());
+        EntityModel entityModel = manager.getEntityModel(e.getPlayer().getUniqueId());
         if (entityModel != null && entityModel.isDisguised()) {
             this.playerCache.put(e.getPlayer().getUniqueId(), entityModel);
             this.gamemodeCache.put(e.getPlayer().getUniqueId(), e.getPlayer().getGameMode());
