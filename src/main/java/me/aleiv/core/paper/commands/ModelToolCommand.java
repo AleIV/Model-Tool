@@ -65,19 +65,21 @@ public class ModelToolCommand extends BaseCommand {
     }
 
     @Subcommand("kill")
-    @CommandCompletion("@entitymodels @bool")
-    public void onKill(CommandSender sender, EntityModel entityModel, @Optional @Default("true") Boolean force) {
+    @CommandCompletion("@entitymodels")
+    public void onKill(CommandSender sender, EntityModel entityModel) {
         if (entityModel.isDying()) {
             sender.sendMessage("§cEl modelo ya se esta muriendo");
             return;
         }
 
-        if (force) {
-            entityModel.forceKill();
-        } else {
-            entityModel.kill(null);
-        }
+        entityModel.kill(null);
+        sender.sendMessage("§aHas matado a " + entityModel.getName());
+    }
 
+    @Subcommand("forcekill")
+    @CommandCompletion("@entitymodels")
+    public void onForcekill(CommandSender sender, EntityModel entityModel) {
+        entityModel.forceKill();
         sender.sendMessage("§aHas matado a " + entityModel.getName());
     }
 
