@@ -119,6 +119,7 @@ public class EntityModel {
             ((Player) this.entity).setGameMode(GameMode.SPECTATOR);
         }
         this.activeModel.clearModel();
+        ModelTool.getInstance().getEntityModelManager()._removeModel(this.uuid);
         Bukkit.getPluginManager().callEvent(new EntityModelForceDeathEvent(this));
     }
 

@@ -198,6 +198,10 @@ public class EntityModelManager implements Listener {
         }
     }
 
+    public void _removeModel(UUID uuid) {
+        this.entityModelHashMap.remove(uuid);
+    }
+
     // The entity cannot die (shouldn't trigger this event)
     /*@EventHandler
     private void onEntityDie(EntityDeathEvent e) {
