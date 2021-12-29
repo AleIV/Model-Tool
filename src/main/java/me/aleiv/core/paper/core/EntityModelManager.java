@@ -131,6 +131,17 @@ public class EntityModelManager implements Listener {
                 () -> player.sendMessage("§cNo estas en un modelo"));
     }
 
+    /**
+     * Checks if a player is disguised
+     *
+     * @param player Player to check
+     * @return True if the player is disguised
+     */
+    public boolean isPlayerDisguised(Player player) {
+        return getEntityModels().stream()
+            .anyMatch(em -> em.getEntity().getUniqueId().equals(player.getUniqueId()));
+    }
+
     public enum EventDamageCause {
         NONE,
         BLOCK,
