@@ -29,7 +29,19 @@ public class ModelToolCommand extends BaseCommand {
     @CatchUnknown
     @Subcommand("help")
     public void onHelp(CommandSender sender) {
+        String helpCommand = """
+                ========================================================
+                §a§lModelTool §7- §fComandos de ModelTool
 
+                §a/modeltool spawn <Bukkit Entity> <ModelId> [Health] §7- §fSpawnear un modelo
+                §a/modeltool disguise <EntityModelName> §7- §fDisfrazar a un modelo
+                §a/modeltool undisguise §7- §fDesdisfrazar a un modelo
+                §a/modeltool kill <EntityModelName> §7- §fMatar a un modelo
+                §a/modeltool fixinvisibility §7- §fHacerte visible
+                §a/modeltool help §7- §fMuestra este mensaje
+                ========================================================
+                """;
+        sender.sendMessage(helpCommand);
     }
 
     @Subcommand("fixinvisibility")
@@ -45,7 +57,7 @@ public class ModelToolCommand extends BaseCommand {
 
     @Subcommand("spawn")
     @CommandCompletion("@mobs @modelids @range:1-1000")
-    @Syntax("<Bukkit Models> <ModelId> [Health]")
+    @Syntax("<Bukkit Entity> <ModelId> [Health]")
     public void onSpawn(Player player, EntityType entityType, String modelId, @Default("20") Integer health) {
         try {
             EntityModel entityModel = plugin.getEntityModelManager().spawnEntityModel(entityType.name() + String.valueOf(new Random().nextInt(999)), health, modelId, player.getLocation(), entityType, EntityMood.NEUTRAL);
