@@ -30,6 +30,9 @@ public class ModelTool extends JavaPlugin {
         BukkitTCT.registerPlugin(this);
         NegativeSpaces.registerCodes();
 
+        this.entityModelManager = new EntityModelManager(this);
+        this.entityModelManager.registerListener();
+
         this.registerCommands();
         this.registerListeners();
     }

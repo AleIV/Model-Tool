@@ -36,6 +36,13 @@ public class EntityModelManager implements Listener {
     }
 
     /**
+     * Registers itself as a listener
+     */
+    public void registerListener() {
+        Bukkit.getPluginManager().registerEvents(this, this.plugin);
+    }
+
+    /**
      *
      * @param entityUUID The UUID of the bukkit entity
      * @return The EntityModel of the entity or null if no entity exists
