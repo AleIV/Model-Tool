@@ -56,7 +56,7 @@ public class ModelToolCommand extends BaseCommand {
     @CommandCompletion("@entitymodels")
     public void onDisguise(Player player, EntityModel entityModel) {
         entityModel.disguise(player);
-        System.out.println("§aHas sido disfrazado de " + entityModel.getName());
+        player.sendMessage("§aHas sido disfrazado de " + entityModel.getName());
     }
 
     @Subcommand("undisguise")
