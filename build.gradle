@@ -87,8 +87,10 @@ artifacts {
 publishing {
     publications {
         maven(MavenPublication) {
-            artifactId = 'ModelTool'
-            from components.java
+            from(components.java)
+            group = rootProject.group
+            artifactId = "ModelTool"
+            version = rootProject.version
         }
     }
 }
