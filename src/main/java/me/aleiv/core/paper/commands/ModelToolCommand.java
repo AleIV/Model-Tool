@@ -53,7 +53,7 @@ public class ModelToolCommand extends BaseCommand {
     }
 
     @Subcommand("disguise")
-    @CommandCompletion("@entitimodels")
+    @CommandCompletion("@entitymodels")
     public void onDisguise(Player player, EntityModel entityModel) {
 
     }
