@@ -160,8 +160,8 @@ public class EntityModel {
 
         ModeledEntity modeledEntity = ModelEngineAPI.api.getModelManager().getModeledEntity(player.getUniqueId());
         if (modeledEntity != null) {
-            // TODO: Force old model to be undisguised
-            // modeledEntity.clearModels();
+            // Removing old disguise of the player
+            ModelTool.getInstance().getEntityModelManager().undisguisePlayer(player);
         } else {
             modeledEntity = ModelEngineAPI.api.getModelManager().createModeledEntity(player);
         }
