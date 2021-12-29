@@ -45,6 +45,7 @@ public class ModelToolCommand extends BaseCommand {
 
     @Subcommand("spawn")
     @CommandCompletion("@mobs @modelids @range:1-1000")
+    @Syntax("<Bukkit Models> <ModelId> [Health]")
     public void onSpawn(Player player, EntityType entityType, String modelId, @Default("20") Integer health) {
         try {
             EntityModel entityModel = plugin.getEntityModelManager().spawnEntityModel(entityType.name() + String.valueOf(new Random().nextInt(999)), health, modelId, player.getLocation(), entityType, EntityMood.NEUTRAL);
@@ -56,6 +57,7 @@ public class ModelToolCommand extends BaseCommand {
 
     @Subcommand("disguise")
     @CommandCompletion("@entitymodels")
+    @Syntax("<EntityModelName>")
     public void onDisguise(Player player, EntityModel entityModel) {
         entityModel.disguise(player);
         player.sendMessage("§aHas sido disfrazado de " + entityModel.getName());
@@ -68,6 +70,7 @@ public class ModelToolCommand extends BaseCommand {
 
     @Subcommand("kill")
     @CommandCompletion("@entitymodels")
+    @Syntax("<EntityModelName>")
     public void onKill(CommandSender sender, EntityModel entityModel) {
         if (entityModel.isDying()) {
             sender.sendMessage("§cEl modelo ya se esta muriendo");
@@ -80,6 +83,7 @@ public class ModelToolCommand extends BaseCommand {
 
     @Subcommand("forcekill")
     @CommandCompletion("@entitymodels")
+    @Syntax("<EntityModelName>")
     public void onForcekill(CommandSender sender, EntityModel entityModel) {
         entityModel.forceKill();
         sender.sendMessage("§aHas matado a " + entityModel.getName());
