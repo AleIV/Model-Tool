@@ -3,6 +3,7 @@ plugins{
     id 'kr.entree.spigradle' version '2.2.4'
     id 'com.github.johnrengelman.shadow' version '7.1.1'
     id 'io.freefair.lombok' version '6.1.0'
+    id 'maven-publish'
 }
 
 group = 'net.aleiv'
@@ -23,7 +24,6 @@ javadoc {
 
 repositories {
     mavenCentral()
-    jcenter()
     maven { url 'https://papermc.io/repo/repository/maven-public/' }
     maven { url 'https://libraries.minecraft.net/' }
     maven { url 'https://plugins.gradle.org/m2' }
