@@ -58,9 +58,9 @@ spigot {
     authors 'aleiv, Dolphln'
     apiVersion '1.16'
     version '0.1'
-    name 'ModelEngine'
+    name 'ModelTool'
     load STARTUP
-    //depends = ['ProtocolLib']
+    depends = ['ModelEngine']
 }
 
 shadowJar {
