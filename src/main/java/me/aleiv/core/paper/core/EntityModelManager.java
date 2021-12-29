@@ -7,6 +7,7 @@ import me.aleiv.core.paper.ModelTool;
 import me.aleiv.core.paper.events.EntityModelAttackEvent;
 import me.aleiv.core.paper.events.EntityModelDamageEvent;
 import me.aleiv.core.paper.events.EntityModelSpawnEvent;
+import me.aleiv.core.paper.exceptions.InvalidAnimationException;
 import me.aleiv.core.paper.exceptions.InvalidModelIdException;
 import me.aleiv.core.paper.models.EntityMood;
 import org.bukkit.Bukkit;
@@ -181,6 +182,9 @@ public class EntityModelManager implements Listener {
         if (cause == EventDamageCause.ENTITY) {
             entityModel = this.entityModelHashMap.get(((EntityDamageByEntityEvent) e).getDamager().getUniqueId());
             if (entityModel != null) {
+                try {
+                    entityModel.playAnimation("attack");
+                } catch (InvalidAnimationException ignore) {}
                 Bukkit.getPluginManager().callEvent(new EntityModelAttackEvent(entityModel, entity));
             }
         }
