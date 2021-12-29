@@ -28,7 +28,7 @@ public class EntityModelManager implements Listener {
 
     private final ModelTool plugin;
 
-    private HashMap<UUID, EntityModel> entityModelHashMap;
+    private final HashMap<UUID, EntityModel> entityModelHashMap;
 
     public EntityModelManager(ModelTool modelTool) {
         this.plugin = modelTool;
@@ -65,17 +65,7 @@ public class EntityModelManager implements Listener {
      * @return List of all EntityModels
      */
     public List<EntityModel> getEntityModels() {
-        return null;
-    }
-
-    /**
-     * Little filter to get all the EntityModels
-     *
-     * @param alive Filters if the EntityModel is alive or not
-     * @return List of the filtered EntityModels
-     */
-    public List<EntityModel> getEntityModels(boolean alive) {
-        return null;
+        return this.entityModelHashMap.values().stream().toList();
     }
 
     /**
