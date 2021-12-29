@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class EntityModelEvent extends Event {
 
-    private final HandlerList handlerList = new HandlerList();
+    private static final HandlerList handlerList = new HandlerList();
 
     private final EntityModel entityModel;
 
@@ -18,6 +18,10 @@ public class EntityModelEvent extends Event {
 
     @Override
     public @NotNull HandlerList getHandlers() {
+        return handlerList;
+    }
+
+    public static HandlerList getHandlerList() {
         return handlerList;
     }
 
