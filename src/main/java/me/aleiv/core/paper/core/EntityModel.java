@@ -179,6 +179,7 @@ public class EntityModel {
 
         this.entity.remove();
         this.entity = player;
+        this.updateUUID(entity.getUniqueId());
 
         this.modeledEntity.detectPlayers();
         this.modeledEntity.removePlayerAsync(player);
@@ -191,19 +192,27 @@ public class EntityModel {
         Player player = (Player) this.entity;
 
         Entity entity = this.entity.getWorld().spawnEntity(this.entity.getLocation(), this.originalEntityType);
-        ModeledEntity modeledEntity = ModelEngineAPI.api.getModelManager().getModeledEntity(this.entity.getUniqueId());
+        ModeledEntity modeledEntity = ModelEngineAPI.api.getModelManager().createModeledEntity(entity);
         this.activeModel.setModeledEntity(modeledEntity);
         this.modeledEntity = modeledEntity;
         this.modeledEntity.setInvisible(true);
         this.modeledEntity.addActiveModel(this.activeModel);
 
         this.entity = entity;
+        this.updateUUID(entity.getUniqueId());
         this.disguised = false;
         this.entityType = this.originalEntityType;
 
         this.modeledEntity.detectPlayers();
 
         Bukkit.getPluginManager().callEvent(new EntityModelUndisguiseEvent(this, player));
+    }
+
+    private void updateUUID(UUID newUUID) {
+        UUID oldUUID = this.uuid;
+        this.uuid = newUUID;
+        ModelTool.getInstance().getEntityModelManager()._updateUUID(oldUUID, newUUID);
+
     }
 
 }

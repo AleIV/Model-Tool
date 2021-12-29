@@ -186,6 +186,14 @@ public class EntityModelManager implements Listener {
         }
     }
 
+    public void _updateUUID(UUID oldUUID, UUID newUUID) {
+        EntityModel entityModel = this.entityModelHashMap.get(oldUUID);
+        if (entityModel != null) {
+            this.entityModelHashMap.remove(oldUUID);
+            this.entityModelHashMap.put(newUUID, entityModel);
+        }
+    }
+
     // The entity cannot die (shouldn't trigger this event)
     /*@EventHandler
     private void onEntityDie(EntityDeathEvent e) {
