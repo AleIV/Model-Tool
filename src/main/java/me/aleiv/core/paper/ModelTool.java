@@ -51,7 +51,7 @@ public class ModelTool extends JavaPlugin {
         this.commandManager.getCommandCompletions().registerAsyncCompletion("modelids", (ctx) -> ModelEngineAPI.api.getModelManager().getModelRegistry().getRegisteredModel().keySet());
         this.commandManager.getCommandCompletions().registerAsyncCompletion("entitymodelsuuid", (ctx) -> this.entityModelManager.getEntityModels().stream().map(em -> em.getUuid().toString()).collect(java.util.stream.Collectors.toList()));
         this.commandManager.getCommandContexts().registerContext(EntityModel.class, (ctx) -> {
-            String name = ctx.getFirstArg();
+            String name = ctx.popFirstArg();
             EntityModel entityModel = this.entityModelManager.getEntityModel(name);
             if (entityModel == null) {
                 throw new InvalidCommandArgument("No entity model with the name '" + name + "' exists.");
