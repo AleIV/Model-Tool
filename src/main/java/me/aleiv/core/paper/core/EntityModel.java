@@ -61,7 +61,7 @@ public class EntityModel {
         this.mood = mood;
 
         this.dying = false;
-        this.disguised = this.entityType != EntityType.PLAYER;
+        this.disguised = this.entityType == EntityType.PLAYER;
     }
 
     public void teleport(Location location) {
