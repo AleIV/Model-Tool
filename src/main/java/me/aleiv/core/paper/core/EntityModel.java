@@ -172,7 +172,7 @@ public class EntityModel {
     }
 
     public void disguise(Player player) {
-        if (this.disguised) return;
+        if (this.disguised || this.dying) return;
         this.disguised = true;
         this.entityType = EntityType.PLAYER;
 
@@ -204,8 +204,9 @@ public class EntityModel {
     }
 
     public void undisguise() {
-        if (!this.disguised) return;
+        if (!this.disguised || this.dying) return;
         Player player = (Player) this.entity;
+        player.setGameMode(GameMode.SPECTATOR);
 
         Entity entity = this.entity.getWorld().spawnEntity(this.entity.getLocation(), this.originalEntityType);
         ModeledEntity modeledEntity = ModelEngineAPI.api.getModelManager().createModeledEntity(entity);
