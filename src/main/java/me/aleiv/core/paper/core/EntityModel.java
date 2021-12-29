@@ -11,6 +11,7 @@ import me.aleiv.core.paper.exceptions.InvalidAnimationException;
 import me.aleiv.core.paper.models.EntityMood;
 import me.aleiv.core.paper.utilities.TCT.BukkitTCT;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -88,6 +89,10 @@ public class EntityModel {
     public void kill(Entity killer) {
         if (this.dying) return;
         this.dying = true;
+        if (this.disguised) {
+            ((Player) this.entity).setGameMode(GameMode.SPECTATOR);
+        }
+
         Animation deathAnimation = this.getAnimation("death");
         if (deathAnimation == null) {
             this.forceKill();
@@ -105,11 +110,13 @@ public class EntityModel {
     }
 
     /**
-     * Will remove the entity without launching any event, or state
+     * Will remove the entity and the model without any animation
      */
     public void forceKill() {
         if (!this.disguised) {
             this.entity.remove();
+        } else {
+            ((Player) this.entity).setGameMode(GameMode.SPECTATOR);
         }
         this.activeModel.clearModel();
         Bukkit.getPluginManager().callEvent(new EntityModelForceDeathEvent(this));
