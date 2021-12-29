@@ -6,7 +6,6 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import lombok.Getter;
 import me.aleiv.modeltool.ModelTool;
-import me.aleiv.core.paper.events.*;
 import me.aleiv.modeltool.exceptions.InvalidAnimationException;
 import me.aleiv.modeltool.models.EntityMood;
 import me.aleiv.modeltool.events.*;
