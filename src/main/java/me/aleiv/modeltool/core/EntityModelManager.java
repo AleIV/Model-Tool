@@ -3,7 +3,6 @@ package me.aleiv.modeltool.core;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
-import me.aleiv.modeltool.ModelTool;
 import me.aleiv.modeltool.events.EntityModelAttackEvent;
 import me.aleiv.modeltool.events.EntityModelDamageEvent;
 import me.aleiv.modeltool.events.EntityModelSpawnEvent;
@@ -20,6 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,12 +27,12 @@ import java.util.UUID;
 
 public class EntityModelManager implements Listener {
 
-    private final ModelTool plugin;
+    private final JavaPlugin plugin;
 
     private final HashMap<UUID, EntityModel> entityModelHashMap;
 
-    public EntityModelManager(ModelTool modelTool) {
-        this.plugin = modelTool;
+    public EntityModelManager(JavaPlugin plugin) {
+        this.plugin = plugin;
         this.entityModelHashMap = new HashMap<>();
     }
 
