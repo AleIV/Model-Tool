@@ -172,17 +172,19 @@ public class EntityModel {
 
         player.teleport(this.entity.getLocation());
 
+        this.modeledEntity.clearModels();
+        this.modeledEntity.getAllActiveModel().clear();
+
         this.modeledEntity = modeledEntity;
-        this.activeModel.setModeledEntity(modeledEntity);
         this.modeledEntity.setInvisible(true);
         this.modeledEntity.addActiveModel(this.activeModel);
 
         this.entity.remove();
         this.entity = player;
         this.updateUUID(entity.getUniqueId());
+        this.entityType = EntityType.PLAYER;
 
         this.modeledEntity.detectPlayers();
-        this.modeledEntity.removePlayerAsync(player);
 
         Bukkit.getPluginManager().callEvent(new EntityModelDisguiseEvent(this, player));
     }
@@ -193,7 +195,7 @@ public class EntityModel {
 
         Entity entity = this.entity.getWorld().spawnEntity(this.entity.getLocation(), this.originalEntityType);
         ModeledEntity modeledEntity = ModelEngineAPI.api.getModelManager().createModeledEntity(entity);
-        this.activeModel.setModeledEntity(modeledEntity);
+        this.modeledEntity.clearModels();
         this.modeledEntity = modeledEntity;
         this.modeledEntity.setInvisible(true);
         this.modeledEntity.addActiveModel(this.activeModel);
@@ -202,6 +204,11 @@ public class EntityModel {
         this.updateUUID(entity.getUniqueId());
         this.disguised = false;
         this.entityType = this.originalEntityType;
+        ModeledEntity playerModel = ModelEngineAPI.api.getModelManager().createModeledEntity(player);
+        if (playerModel != null) {
+            playerModel.clearModels();
+            playerModel.getAllActiveModel().clear();
+        }
 
         this.modeledEntity.detectPlayers();
 
