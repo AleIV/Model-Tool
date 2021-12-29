@@ -5,6 +5,7 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import lombok.Getter;
 import me.aleiv.core.paper.ModelTool;
+import me.aleiv.core.paper.events.EntityModelChangeMoodEvent;
 import me.aleiv.core.paper.events.EntityModelDeathEvent;
 import me.aleiv.core.paper.models.EntityMood;
 import org.bukkit.Bukkit;
@@ -144,13 +145,14 @@ public class EntityModel {
      * @param mood New mood
      */
     public void setMood(EntityMood mood) {
-        this.mood = mood;
         if (disguised) {
             this.entity.sendMessage("Mood changed to " + mood.name());
             return;
         }
 
         // TODO: Need to do NMS stuff
+        Bukkit.getPluginManager().callEvent(new EntityModelChangeMoodEvent(this, this.mood, mood));
+        this.mood = mood;
     }
 
     public void disguise(Player player) {
