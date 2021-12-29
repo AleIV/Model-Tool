@@ -4,11 +4,12 @@ import lombok.Getter;
 import me.aleiv.core.paper.core.EntityModel;
 import org.bukkit.entity.Player;
 
-public class EntityModelDisguiseEvent extends EntityModelEvent {
+public class EntityModelUndisguiseEvent extends EntityModelEvent {
 
-    @Getter private final Player player;
+    @Getter
+    private final Player player;
 
-    public EntityModelDisguiseEvent(EntityModel entityModel, Player player) {
+    public EntityModelUndisguiseEvent(EntityModel entityModel, Player player) {
         super(entityModel);
         this.player = player;
     }
