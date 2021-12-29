@@ -46,6 +46,16 @@ public class EntityModelManager implements Listener {
     }
 
     /**
+     * Get an EntityModel from the name
+     *
+     * @param entityModelName The Name of the entityModel (not case sensitive)
+     * @return The EntityModel of the entity or null if no matches are found
+     */
+    public EntityModel getEntityModel(String entityModelName) {
+        return entityModelHashMap.values().stream().filter(entityModel -> entityModel.getName().equalsIgnoreCase(entityModelName)).findFirst().orElse(null);
+    }
+
+    /**
      * @return List of all EntityModels
      */
     public List<EntityModel> getEntityModels() {
@@ -75,6 +85,7 @@ public class EntityModelManager implements Listener {
      */
     public EntityModel spawnEntityModel(String name, double health, String modelId, Location loc, EntityType entityType, EntityMood entityMood) throws InvalidModelIdException {
         Entity entity = loc.getWorld().spawnEntity(loc, entityType);
+        entity.setCustomName(name);
 
         ModeledEntity modeledEntity = ModelEngineAPI.api.getModelManager().createModeledEntity(entity);
         ActiveModel activeModel = ModelEngineAPI.api.getModelManager().createActiveModel(modelId);
