@@ -180,6 +180,9 @@ public class EntityModel {
         this.entity.remove();
         this.entity = player;
 
+        this.modeledEntity.detectPlayers();
+        this.modeledEntity.removePlayerAsync(player);
+
         Bukkit.getPluginManager().callEvent(new EntityModelDisguiseEvent(this, player));
     }
 
@@ -197,6 +200,8 @@ public class EntityModel {
         this.entity = entity;
         this.disguised = false;
         this.entityType = this.originalEntityType;
+
+        this.modeledEntity.detectPlayers();
 
         Bukkit.getPluginManager().callEvent(new EntityModelUndisguiseEvent(this, player));
     }

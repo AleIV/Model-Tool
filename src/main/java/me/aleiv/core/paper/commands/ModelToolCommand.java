@@ -43,7 +43,7 @@ public class ModelToolCommand extends BaseCommand {
     }
 
     @Subcommand("spawn")
-    @CommandCompletion("@mobs @nothing @range:1-1000")
+    @CommandCompletion("@mobs @modelids @range:1-1000")
     public void onSpawn(Player player, EntityType entityType, String modelId, @Default("20") Integer health) {
         try {
             plugin.getEntityModelManager().spawnEntityModel(entityType.name() + String.valueOf(new Random().nextInt(999)), health, modelId, player.getLocation(), entityType, EntityMood.NEUTRAL);
@@ -60,7 +60,7 @@ public class ModelToolCommand extends BaseCommand {
     }
 
     @Subcommand("undisguise")
-    public void onDisguise(Player player) {
+    public void onUndisguise(Player player) {
         plugin.getEntityModelManager().undisguisePlayer(player);
     }
 
