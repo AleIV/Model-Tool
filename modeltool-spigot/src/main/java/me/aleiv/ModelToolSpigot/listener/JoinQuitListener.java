@@ -1,15 +1,14 @@
 package me.aleiv.core.paper.listener;
 
-import me.aleiv.core.paper.ModelTool;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class JoinQuitListener implements Listener {
 
-    private final ModelTool plugin;
+    private final me.aleiv.core.paper.ModelToolSpigot plugin;
 
-    public JoinQuitListener(ModelTool plugin) {
+    public JoinQuitListener(me.aleiv.core.paper.ModelToolSpigot plugin) {
         this.plugin = plugin;
     }
 

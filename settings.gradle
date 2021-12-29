@@ -8,3 +8,5 @@
  */
 
 rootProject.name = 'ModelTool'
+
+include 'modeltool-common', 'modeltool-spigot'

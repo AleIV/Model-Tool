@@ -3,7 +3,7 @@ package me.aleiv.core.paper.core;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
-import me.aleiv.core.paper.ModelTool;
+import me.aleiv.ModelToolSpigot.ModelToolSpigot;
 import me.aleiv.core.paper.events.EntityModelAttackEvent;
 import me.aleiv.core.paper.events.EntityModelDamageEvent;
 import me.aleiv.core.paper.events.EntityModelSpawnEvent;
@@ -26,11 +26,11 @@ import java.util.UUID;
 
 public class EntityModelManager implements Listener {
 
-    private final ModelTool plugin;
+    private final ModelToolSpigot plugin;
 
     private final HashMap<UUID, EntityModel> entityModelHashMap;
 
-    public EntityModelManager(ModelTool modelTool) {
+    public EntityModelManager(me.aleiv.core.paper.ModelToolSpigot modelTool) {
         this.plugin = modelTool;
         this.entityModelHashMap = new HashMap<>();
     }

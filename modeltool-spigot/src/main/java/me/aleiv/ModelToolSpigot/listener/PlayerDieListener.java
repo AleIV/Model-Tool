@@ -1,6 +1,5 @@
 package me.aleiv.core.paper.listener;
 
-import me.aleiv.core.paper.ModelTool;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -8,9 +7,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class PlayerDieListener implements Listener {
 
-    private final ModelTool plugin;
+    private final me.aleiv.core.paper.ModelToolSpigot plugin;
 
-    public PlayerDieListener(ModelTool plugin) {
+    public PlayerDieListener(me.aleiv.core.paper.ModelToolSpigot plugin) {
         this.plugin = plugin;
     }
 

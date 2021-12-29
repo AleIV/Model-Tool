@@ -1,0 +1,29 @@
+plugins {
+  id 'com.github.johnrengelman.shadow'
+  id 'kr.entree.spigradle'
+  id 'io.freefair.lombok'
+}
+
+spigot {
+    authors 'aleiv, Dolphln'
+    apiVersion '1.16'
+    version '0.1'
+    name 'ModelTool'
+    load STARTUP
+    depends = ['ModelEngine']
+}
+
+dependencies {
+    api project(':modeltool-common')
+    compileOnly 'com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT'
+    implementation 'co.aikar:acf-paper:0.5.0-SNAPSHOT'
+}
+
+shadowJar {
+    relocate 'co.aikar.commands', 'shadded.acf'
+    relocate 'co.aikar.locales', 'shadded.acf.locales'
+    relocate 'us.jcedeno.libs.rapidinv', 'com.yourpackage.rapidinv'
+    minimize();
+}
+
+tasks.build.dependsOn tasks.shadowJar

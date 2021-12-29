@@ -1,4 +1,4 @@
-package me.aleiv.core.paper;
+package me.aleiv.ModelToolSpigot;
 
 import co.aikar.commands.InvalidCommandArgument;
 import com.ticxo.modelengine.api.ModelEngineAPI;
@@ -17,9 +17,9 @@ import me.aleiv.core.paper.utilities.NegativeSpaces;
 import me.aleiv.core.paper.utilities.TCT.BukkitTCT;
 
 @SpigotPlugin
-public class ModelTool extends JavaPlugin {
+public class ModelToolSpigot extends JavaPlugin {
 
-    @Getter private static ModelTool instance;
+    @Getter private static ModelToolSpigot instance;
     private PaperCommandManager commandManager;
 
     @Getter private EntityModelManager entityModelManager;

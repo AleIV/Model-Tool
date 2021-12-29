@@ -4,7 +4,6 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ModeledEntity;
-import me.aleiv.core.paper.ModelTool;
 import me.aleiv.core.paper.core.EntityModel;
 import me.aleiv.core.paper.exceptions.InvalidAnimationException;
 import me.aleiv.core.paper.exceptions.InvalidModelIdException;
@@ -19,9 +18,9 @@ import java.util.Random;
 @CommandPermission("modeltool.command")
 public class ModelToolCommand extends BaseCommand {
 
-    private final ModelTool plugin;
+    private final me.aleiv.core.paper.ModelToolSpigot plugin;
 
-    public ModelToolCommand(ModelTool plugin) {
+    public ModelToolCommand(me.aleiv.core.paper.ModelToolSpigot plugin) {
         this.plugin = plugin;
     }
 
