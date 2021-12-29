@@ -6,6 +6,7 @@ import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import me.aleiv.core.paper.ModelTool;
 import me.aleiv.core.paper.core.EntityModel;
+import me.aleiv.core.paper.exceptions.InvalidAnimationException;
 import me.aleiv.core.paper.exceptions.InvalidModelIdException;
 import me.aleiv.core.paper.models.EntityMood;
 import org.bukkit.command.CommandSender;
@@ -46,7 +47,8 @@ public class ModelToolCommand extends BaseCommand {
     @CommandCompletion("@mobs @modelids @range:1-1000")
     public void onSpawn(Player player, EntityType entityType, String modelId, @Default("20") Integer health) {
         try {
-            plugin.getEntityModelManager().spawnEntityModel(entityType.name() + String.valueOf(new Random().nextInt(999)), health, modelId, player.getLocation(), entityType, EntityMood.NEUTRAL);
+            EntityModel entityModel = plugin.getEntityModelManager().spawnEntityModel(entityType.name() + String.valueOf(new Random().nextInt(999)), health, modelId, player.getLocation(), entityType, EntityMood.NEUTRAL);
+            player.sendMessage("§aHas spawneado a " + entityModel.getName());
         } catch (InvalidModelIdException e) {
             player.sendMessage("§cModelo invalido");
         }
@@ -81,6 +83,18 @@ public class ModelToolCommand extends BaseCommand {
     public void onForcekill(CommandSender sender, EntityModel entityModel) {
         entityModel.forceKill();
         sender.sendMessage("§aHas matado a " + entityModel.getName());
+    }
+
+    @Subcommand("playanim")
+    @CommandCompletion("@entitymodels @nothing")
+    @Syntax("<EntityModelName> <AnimationName>")
+    public void onForcekill(CommandSender sender, EntityModel entityModel, String animation) {
+        try {
+            entityModel.playAnimation(animation);
+            sender.sendMessage("§aHas reproducido la animacion " + animation + " en " + entityModel.getName());
+        } catch (InvalidAnimationException e) {
+            sender.sendMessage("§cNo existe la animacion " + animation + " en el modelo " + entityModel.getActiveModel().getModelId());
+        }
     }
 
 }
