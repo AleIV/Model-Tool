@@ -6,7 +6,7 @@ plugins{
     id 'maven-publish'
 }
 
-group = 'net.aleiv'
+group = 'com.github.AleIV'
 version = '0.1-SNAPSHOT'
 
 compileJava{
@@ -68,6 +68,10 @@ shadowJar {
     relocate 'co.aikar.locales', 'shadded.acf.locales'
     relocate 'us.jcedeno.libs.rapidinv', 'com.yourpackage.rapidinv'
     minimize();
+}
+
+artifacts {
+    archives shadowJar
 }
 
 tasks.build.dependsOn tasks.shadowJar
