@@ -63,6 +63,14 @@ spigot {
     depends = ['ModelEngine']
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+}
+
 shadowJar {
     relocate 'co.aikar.commands', 'shadded.acf'
     relocate 'co.aikar.locales', 'shadded.acf.locales'
@@ -71,6 +79,8 @@ shadowJar {
 }
 
 artifacts {
+    archives sourcesJar
+    archives javadocJar
     archives shadowJar
 }
 
