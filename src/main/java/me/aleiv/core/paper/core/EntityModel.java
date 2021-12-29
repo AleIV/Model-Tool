@@ -6,10 +6,7 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import lombok.Getter;
 import me.aleiv.core.paper.ModelTool;
-import me.aleiv.core.paper.events.EntityModelChangeMoodEvent;
-import me.aleiv.core.paper.events.EntityModelDeathEvent;
-import me.aleiv.core.paper.events.EntityModelDisguiseEvent;
-import me.aleiv.core.paper.events.EntityModelUndisguiseEvent;
+import me.aleiv.core.paper.events.*;
 import me.aleiv.core.paper.exceptions.InvalidAnimationException;
 import me.aleiv.core.paper.models.EntityMood;
 import me.aleiv.core.paper.utilities.TCT.BukkitTCT;
@@ -115,6 +112,7 @@ public class EntityModel {
             this.entity.remove();
         }
         this.activeModel.clearModel();
+        Bukkit.getPluginManager().callEvent(new EntityModelForceDeathEvent(this));
     }
 
     /**
