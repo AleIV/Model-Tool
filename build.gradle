@@ -87,4 +87,15 @@ artifacts {
     archives shadowJar
 }
 
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+            group rootProject.group
+            artifactId rootProject.name
+            version rootProject.version
+        }
+    }
+}
+
 tasks.build.dependsOn tasks.shadowJar
