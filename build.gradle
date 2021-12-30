@@ -76,20 +76,15 @@ shadowJar {
     relocate 'co.aikar.locales', 'shadded.acf.locales'
     relocate 'us.jcedeno.libs.rapidinv', 'com.yourpackage.rapidinv'
     minimize();
+
+    //archiveName("${archiveBaseName}-${archiveVersion}.${archiveExtension}")
+    archiveName = "$baseName-$version.$extension"
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-            group = rootProject.group
-            artifactId = "ModelTool"
-            version = rootProject.version
-            afterEvaluate {
-                artifact shadowJar
-            }
-        }
-    }
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+    archives shadowJar
 }
 
 tasks.build.dependsOn tasks.shadowJar
