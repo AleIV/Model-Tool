@@ -121,7 +121,7 @@ public class EntityModelManager implements Listener {
             return null;
         }
 
-        ActiveModel activeModel = modeledEntity.getAllActiveModel().values().stream().findFirst().orElse(null);
+        ActiveModel activeModel = modeledEntity.getAllActiveModel().values().stream().filter(am -> am.getModelId() != null && !am.getModelId().equals("")).findFirst().orElse(null);
         if (activeModel == null) {
             return null;
         }
