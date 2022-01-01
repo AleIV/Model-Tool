@@ -38,7 +38,7 @@ public class ModelTool extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        this.entityModelManager.getEntityModels().stream().filter(EntityModel::isDisguised).forEach(EntityModel::undisguise);
     }
 
     private void registerCommands() {

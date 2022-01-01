@@ -87,7 +87,7 @@ artifacts {
     archives shadowJar
 }
 
-publishing {
+/*publishing {
     publications {
         maven(MavenPublication) {
             from(components.java)
@@ -96,6 +96,6 @@ publishing {
             version rootProject.version
         }
     }
-}
+}*/
 
 tasks.build.dependsOn tasks.shadowJar
