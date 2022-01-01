@@ -12,8 +12,10 @@ import me.aleiv.modeltool.events.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,9 +33,6 @@ public class EntityModel {
     @Getter private EntityType entityType;
     @Getter private final EntityType originalEntityType;
 
-    // Internal variables
-    @Getter private double maxHealth;
-    @Getter private double health;
     /**
      * Useless right now
      */
@@ -56,8 +55,10 @@ public class EntityModel {
         this.activeModel = activeModel;
         this.modeledEntity = modeledEntity;
 
-        this.maxHealth = maxHealth;
-        this.health = maxHealth;
+        if (entity instanceof LivingEntity livingEntity) {
+            livingEntity.registerAttribute(Attribute.GENERIC_MAX_HEALTH);
+            livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
+        }
         this.mood = mood;
 
         this.dying = false;
@@ -72,10 +73,21 @@ public class EntityModel {
         return this.entity.getLocation();
     }
 
-    public void setHealth(double health) {
-        this.health = health >= this.maxHealth ? this.maxHealth : (health <= 0 ? 0 : health);
+    public double getHealth() {
+        return (this.entity instanceof LivingEntity) ? ((LivingEntity) this.entity).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : 0;
+    }
 
-        if (this.health == 0) {
+    public void setHealth(double health) {
+        double newHealth = health >= this.getHealth() ? this.getHealth() : (health <= 0 ? 0 : health);
+
+        if (newHealth == 0) {
+            this.kill(null);
+            return;
+        }
+
+        if (this.entity instanceof LivingEntity livingEntity) {
+            livingEntity.setHealth(newHealth);
+        } else {
             this.kill(null);
         }
     }
