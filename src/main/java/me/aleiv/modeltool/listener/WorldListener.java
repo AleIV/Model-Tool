@@ -44,7 +44,7 @@ public class WorldListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent e) {
         if (this.hasPlayerJoined) return;
         this.hasPlayerJoined = true;
