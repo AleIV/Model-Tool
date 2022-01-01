@@ -3,6 +3,7 @@ package me.aleiv.modeltool.core;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import lombok.Getter;
 import me.aleiv.modeltool.events.EntityModelAttackEvent;
 import me.aleiv.modeltool.events.EntityModelDamageEvent;
 import me.aleiv.modeltool.events.EntityModelSpawnEvent;
@@ -11,11 +12,14 @@ import me.aleiv.modeltool.exceptions.InvalidModelIdException;
 import me.aleiv.modeltool.listener.JoinQuitListener;
 import me.aleiv.modeltool.listener.MountUnmountListener;
 import me.aleiv.modeltool.listener.PlayerDieListener;
+import me.aleiv.modeltool.listener.WorldListener;
 import me.aleiv.modeltool.models.EntityMood;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,9 +34,11 @@ import java.util.UUID;
 
 public class EntityModelManager implements Listener {
 
+    @Getter private final JavaPlugin javaPlugin;
     private final HashMap<UUID, EntityModel> entityModelHashMap;
 
     public EntityModelManager(JavaPlugin plugin) {
+        this.javaPlugin = plugin;
         this.entityModelHashMap = new HashMap<>();
 
         // Registering Listeners
@@ -40,6 +46,7 @@ public class EntityModelManager implements Listener {
         Bukkit.getPluginManager().registerEvents(new JoinQuitListener(this), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerDieListener(this), plugin);
         Bukkit.getPluginManager().registerEvents(new MountUnmountListener(this), plugin);
+        Bukkit.getPluginManager().registerEvents(new WorldListener(this), plugin);
     }
 
     /**
@@ -98,6 +105,29 @@ public class EntityModelManager implements Listener {
         this.entityModelHashMap.put(entity.getUniqueId(), entityModel);
 
         Bukkit.getPluginManager().callEvent(new EntityModelSpawnEvent(entityModel));
+
+        return entityModel;
+    }
+
+    /**
+     * If the entity is valid, it will be restored to an EntityModel.
+     *
+     * @param entity The entity to restore.
+     * @return The restored EntityModel or null if the entity is not valid.
+     */
+    public EntityModel restoreEntityModel(Entity entity) {
+        ModeledEntity modeledEntity = ModelEngineAPI.api.getModelManager().getModeledEntity(entity.getUniqueId());
+        if (modeledEntity == null) {
+            return null;
+        }
+
+        ActiveModel activeModel = modeledEntity.getAllActiveModel().values().stream().findFirst().orElse(null);
+        if (activeModel == null) {
+            return null;
+        }
+
+        EntityModel entityModel = new EntityModel(entity.getCustomName(), entity, activeModel, modeledEntity, (entity instanceof LivingEntity) ? ((LivingEntity) entity).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : 20, EntityMood.NEUTRAL);
+        this.entityModelHashMap.put(entity.getUniqueId(), entityModel);
 
         return entityModel;
     }
