@@ -7,7 +7,7 @@ plugins{
 }
 
 group = 'com.github.AleIV'
-version = '0.1-SNAPSHOT'
+version = '0.9-SNAPSHOT'
 
 compileJava{
     options.encoding = 'UTF-8'
@@ -38,16 +38,13 @@ dependencies {
     compileOnly 'com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT'
 
     // Lombok
-	compileOnly 'org.projectlombok:lombok:1.18.12'
-	annotationProcessor 'org.projectlombok:lombok:1.18.12'
-	testCompileOnly 'org.projectlombok:lombok:1.18.12'
-	testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 
     // ACF
     implementation 'co.aikar:acf-paper:0.5.0-SNAPSHOT'
-
-    // GUIs
-    // implementation 'com.github.noobstersmc:RapidInv:v0.0.1'
 
     // Model Engine
     compileOnly 'com.ticxo.modelengine:api:R2.2.0'
@@ -64,36 +61,47 @@ spigot {
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    from sourceSets.main.allSource
+    from delombok
+    classifier = 'sources'
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
+    classifier = 'javadoc'
 }
 
 shadowJar {
+    classifier = ''
     relocate 'co.aikar.commands', 'shadded.acf'
     relocate 'co.aikar.locales', 'shadded.acf.locales'
-    relocate 'us.jcedeno.libs.rapidinv', 'com.yourpackage.rapidinv'
     minimize();
 
-    //archiveName("${archiveBaseName}-${archiveVersion}.${archiveExtension}")
-    archiveName = "$baseName-$version.$extension"
 }
 
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-    archives shadowJar
+jar {
+    classifier = "original"
 }
 
 publishing {
     publications {
-        maven(MavenPublication) {
-            from(project.shadow.component(it))
-            group rootProject.group
-            artifactId rootProject.name
-            version rootProject.version
+        mavenJava(MavenPublication) {
+            from project.shadow.component(it)
+
+            artifactId 'ModelTool'
+            version version
+
+            artifact jar
+            artifact javadocJar
+        }
+    }
+    repositories {
+        maven {
+            url 'http://repo.dolphln.com/artifactory/public/'
+            allowInsecureProtocol true
+            credentials {
+                username dolphlnrepoUser
+                password dolphlnrepoPass
+            }
         }
     }
 }
