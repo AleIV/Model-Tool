@@ -100,7 +100,7 @@ public class EntityModelManager implements Listener {
         modeledEntity.detectPlayers();
         modeledEntity.setInvisible(true);
 
-        EntityModel entityModel = new EntityModel(name, entity, activeModel, modeledEntity, health, entityMood);
+        EntityModel entityModel = new EntityModel(this.javaPlugin, this, name, entity, activeModel, modeledEntity, health, entityMood);
 
         this.entityModelHashMap.put(entity.getUniqueId(), entityModel);
 
@@ -126,7 +126,7 @@ public class EntityModelManager implements Listener {
             return null;
         }
 
-        EntityModel entityModel = new EntityModel(entity.getCustomName(), entity, activeModel, modeledEntity, (entity instanceof LivingEntity) ? ((LivingEntity) entity).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : 20, EntityMood.NEUTRAL);
+        EntityModel entityModel = new EntityModel(this.javaPlugin, this, entity.getCustomName(), entity, activeModel, modeledEntity, (entity instanceof LivingEntity) ? ((LivingEntity) entity).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : 20, EntityMood.NEUTRAL);
         this.entityModelHashMap.put(entity.getUniqueId(), entityModel);
 
         return entityModel;

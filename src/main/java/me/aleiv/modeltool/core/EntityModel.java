@@ -5,7 +5,6 @@ import com.ticxo.modelengine.api.generator.blueprint.Animation;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import lombok.Getter;
-import me.aleiv.modeltool.ModelTool;
 import me.aleiv.modeltool.exceptions.InvalidAnimationException;
 import me.aleiv.modeltool.models.EntityMood;
 import me.aleiv.modeltool.events.*;
@@ -17,11 +16,15 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 public class EntityModel {
+
+    private JavaPlugin javaPlugin;
+    private EntityModelManager manager;
 
     // Placeholder variables
     @Getter private UUID uuid;
@@ -46,7 +49,10 @@ public class EntityModel {
     @Getter private final ActiveModel activeModel;
     @Getter private ModeledEntity modeledEntity;
 
-    public EntityModel(String name, Entity entity, ActiveModel activeModel, ModeledEntity modeledEntity, double maxHealth, EntityMood mood) {
+    public EntityModel(JavaPlugin javaPlugin, EntityModelManager manager, String name, Entity entity, ActiveModel activeModel, ModeledEntity modeledEntity, double maxHealth, EntityMood mood) {
+        this.javaPlugin = javaPlugin;
+        this.manager = manager;
+
         this.uuid = entity.getUniqueId();
         this.name = name;
         this.entityType = entity.getType();
@@ -113,7 +119,7 @@ public class EntityModel {
         int frames = deathAnimation.getLength(); // Every frame is a tick
 
         this.activeModel.addState("death", 0, 0, 1);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(ModelTool.getInstance(), () -> {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> {
             this.forceKill();
             // TODO: Add some die particles?
             Bukkit.getPluginManager().callEvent(new EntityModelDeathEvent(this, killer));
@@ -130,7 +136,7 @@ public class EntityModel {
             ((Player) this.entity).setGameMode(GameMode.SPECTATOR);
         }
         this.activeModel.clearModel();
-        ModelTool.getInstance().getEntityModelManager()._removeModel(this.uuid);
+        this.manager._removeModel(this.uuid);
         Bukkit.getPluginManager().callEvent(new EntityModelForceDeathEvent(this));
     }
 
@@ -191,7 +197,7 @@ public class EntityModel {
         ModeledEntity modeledEntity = ModelEngineAPI.api.getModelManager().getModeledEntity(player.getUniqueId());
         if (modeledEntity != null) {
             // Removing old disguise of the player
-            ModelTool.getInstance().getEntityModelManager().undisguisePlayer(player);
+            this.manager.undisguisePlayer(player);
         } else {
             modeledEntity = ModelEngineAPI.api.getModelManager().createModeledEntity(player);
         }
@@ -245,7 +251,7 @@ public class EntityModel {
     private void updateUUID(UUID newUUID) {
         UUID oldUUID = this.uuid;
         this.uuid = newUUID;
-        ModelTool.getInstance().getEntityModelManager()._updateUUID(oldUUID, newUUID);
+        this.manager._updateUUID(oldUUID, newUUID);
     }
 
     // Animations stuff
@@ -285,7 +291,7 @@ public class EntityModel {
         this.activeModel.addState(animationName, 1, 1, 1);
 
         // TODO: Use the TaskChainTool
-        Bukkit.getScheduler().scheduleSyncDelayedTask(ModelTool.getInstance(), () -> this.activeModel.removeState(animationName, false), animation.getLength());
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> this.activeModel.removeState(animationName, false), animation.getLength());
     }
 
 }
