@@ -47,7 +47,7 @@ dependencies {
     implementation 'co.aikar:acf-paper:0.5.0-SNAPSHOT'
 
     // Model Engine
-    implementation 'com.ticxo.modelengine:api:R2.2.0'
+    compileOnly 'com.ticxo.modelengine:api:R2.2.0'
 
 }
 
@@ -74,7 +74,6 @@ shadowJar {
     classifier = ''
     relocate 'co.aikar.commands', 'shadded.acf'
     relocate 'co.aikar.locales', 'shadded.acf.locales'
-    relocate 'com.ticxo.modelengine', 'shadded.modelengine'
     minimize();
 
 }
