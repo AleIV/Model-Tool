@@ -37,14 +37,13 @@ public class RestoreListener implements Listener {
         Bukkit.getWorlds().forEach(this::unloadWorld);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onChunkLoad(EntitiesLoadEvent e) {
-        this.manager._debug("Chunk where entities were loaded: " + e.getChunk().getX() + ", " + e.getChunk().getZ());
-        this.checkEntities(List.of(e.getChunk().getEntities()));
+        // TODO: There's an issue on ModelEngine. Waiting for a fix.
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this.manager.getJavaPlugin(), () -> this.checkEntities(List.of(e.getChunk().getEntities())), 2L);
     }
 
     public void checkEntities(List<Entity> entities) {
-        this.manager._debug("Checking the following entities (" + entities.size() + "): " + entities.toString());
         entities.stream().filter(m -> ModelEngineAPI.api.getModelManager().getModeledEntity(m.getUniqueId()) != null).forEach(entity -> Bukkit.getScheduler().runTask(manager.getJavaPlugin(), () -> {
             this.manager._debug("Entity found: " + entity.getUniqueId());
             try {
