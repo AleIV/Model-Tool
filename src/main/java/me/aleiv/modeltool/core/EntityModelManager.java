@@ -31,6 +31,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EntityModelManager implements Listener {
 
@@ -150,16 +151,18 @@ public class EntityModelManager implements Listener {
      * Undisguise a player if it's in a model
      *
      * @param player Player to undisguise
+     * @return True if the player was undisguised, false if the player was not in a model
      */
-    public void undisguisePlayer(Player player) {
+    public boolean undisguisePlayer(Player player) {
+        AtomicBoolean result = new AtomicBoolean(false);
         getEntityModels().stream()
             .filter(em -> em.getEntity().getUniqueId().equals(player.getUniqueId()))
-            .findFirst().ifPresentOrElse(
+            .findFirst().ifPresent(
                 em -> {
                     em.undisguise();
-                    player.sendMessage("§6Ya no estas disfrazado de " + em.getName());
-                },
-                () -> player.sendMessage("§cNo estas en un modelo"));
+                    result.set(true);
+                });
+        return result.get();
     }
 
     /**
