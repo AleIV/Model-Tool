@@ -235,6 +235,7 @@ public class EntityModel {
         if (!this.disguised || this.dying) return;
         Player player = (Player) this.entity;
         player.setGameMode(GameMode.SPECTATOR);
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
 
         Entity entity = this.entity.getWorld().spawnEntity(this.entity.getLocation(), this.originalEntityType);
         ModeledEntity modeledEntity = ModelEngineAPI.api.getModelManager().createModeledEntity(entity);
