@@ -203,7 +203,7 @@ public class EntityModelManager implements Listener {
         // Detect if damaged
         EntityModel entityModel = this.entityModelHashMap.get(entity.getUniqueId());
 
-        if (entityModel != null && entityModel.getHealth() != 0) {
+        if (entityModel != null && !entityModel.isDying()) {
             double newHealth = entityModel.getHealth() - e.getDamage();
 
             if (newHealth <= 0) {
