@@ -104,20 +104,16 @@ public class EntityModel {
             ((Player) this.entity).setGameMode(GameMode.SPECTATOR);
         }
 
-        Animation deathAnimation = this.getAnimation("death");
-        if (deathAnimation == null) {
+        try {
+            int length = this.playAnimation("death");
+            Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> {
+                this.remove();
+                // TODO: Add some die particles?
+                Bukkit.getPluginManager().callEvent(new EntityModelDeathEvent(this, killer));
+            }, length);
+        } catch (InvalidAnimationException e) {
             this.remove();
-            return;
         }
-
-        int frames = deathAnimation.getLength(); // Every frame is a tick
-
-        this.activeModel.addState("death", 0, 0, 1);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> {
-            this.remove();
-            // TODO: Add some die particles?
-            Bukkit.getPluginManager().callEvent(new EntityModelDeathEvent(this, killer));
-        }, frames);
     }
 
     /**
@@ -292,8 +288,9 @@ public class EntityModel {
      * Plays an animation
      *
      * @param animationName Name of the animation
+     * @return Length of the animation
      */
-    public void playAnimation(String animationName) throws InvalidAnimationException {
+    public int playAnimation(String animationName) throws InvalidAnimationException {
         Animation animation = getAnimation(animationName);
 
         if (animation == null) {
@@ -304,6 +301,7 @@ public class EntityModel {
         this.playSound(this.getAnimationSound(animationName), 1);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> this.activeModel.removeState(animationName, false), animation.getLength());
+        return animation.getLength();
     }
 
     private String getAnimationSound(String animationName) {
