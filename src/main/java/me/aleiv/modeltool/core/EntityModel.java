@@ -301,9 +301,17 @@ public class EntityModel {
         }
 
         this.activeModel.addState(animationName, 1, 1, 1);
+        this.playSound(this.getAnimationSound(animationName), 1);
 
-        // TODO: Use the TaskChainTool
         Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> this.activeModel.removeState(animationName, false), animation.getLength());
+    }
+
+    private String getAnimationSound(String animationName) {
+        return "modeltool." + this.activeModel.getModelId() + "." + animationName;
+    }
+
+    private void playSound(String sound, float vol) {
+        this.entity.getWorld().playSound(this.entity.getLocation(), sound, vol, 1);
     }
 
 }
