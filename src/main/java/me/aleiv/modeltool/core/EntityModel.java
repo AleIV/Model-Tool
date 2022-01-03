@@ -28,17 +28,11 @@ public class EntityModel {
 
     // Placeholder variables
     @Getter private UUID uuid;
-    /**
-     * Useless right now
-     */
     @Getter private final String name;
 
     @Getter private EntityType entityType;
     @Getter private final EntityType originalEntityType;
 
-    /**
-     * Useless right now
-     */
     @Getter private EntityMood mood;
 
     @Getter private boolean dying;
@@ -179,14 +173,30 @@ public class EntityModel {
      * @param mood New mood
      */
     public void setMood(EntityMood mood) {
+        this.mood = mood;
+        this.applyMood(mood);
+
+        Bukkit.getPluginManager().callEvent(new EntityModelChangeMoodEvent(this, this.mood, mood));
+    }
+
+    private void applyMood(EntityMood mood) {
         if (disguised) {
             this.entity.sendMessage("Mood changed to " + mood.name());
             return;
         }
 
-        // TODO: Need to do NMS stuff
-        Bukkit.getPluginManager().callEvent(new EntityModelChangeMoodEvent(this, this.mood, mood));
-        this.mood = mood;
+        switch (mood) {
+            case STATIC -> {
+                if (this.entity instanceof LivingEntity livingEntity) {
+                    livingEntity.setAI(false);
+                }
+            }
+            case HOSTILE, NEUTRAL, PEACEFUL -> { // TODO: Need to do NMS stuff
+                if (this.entity instanceof LivingEntity livingEntity) {
+                    livingEntity.setAI(true);
+                }
+            }
+        }
     }
 
     public void disguise(Player player) {
@@ -234,6 +244,7 @@ public class EntityModel {
         this.modeledEntity.addActiveModel(this.activeModel);
 
         this.entity = entity;
+        this.applyMood(this.mood);
         this.updateUUID(entity.getUniqueId());
         this.disguised = false;
         this.entityType = this.originalEntityType;
