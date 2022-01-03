@@ -194,6 +194,7 @@ public class EntityModel {
     }
 
     private void applyMood(EntityMood mood) {
+        this.manager._debug("Applying mood " + mood);
         if (disguised) {
             this.entity.sendMessage("Mood changed to " + mood.name());
             return;
@@ -215,6 +216,7 @@ public class EntityModel {
 
     public void disguise(Player player) {
         if (this.disguised || this.dying) return;
+        this.manager._debug("Disguising " + this.uuid);
         this.disguised = true;
         this.entityType = EntityType.PLAYER;
 
@@ -247,6 +249,7 @@ public class EntityModel {
 
     public void undisguise() {
         if (!this.disguised || this.dying) return;
+        this.manager._debug("Undisguising " + this.uuid);
         Player player = (Player) this.entity;
         player.setGameMode(GameMode.SPECTATOR);
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
@@ -315,6 +318,8 @@ public class EntityModel {
             throw new InvalidAnimationException(this.activeModel.getModelId(), animationName);
         }
 
+        this.manager._debug("Playing animation " + animationName + " on " + this.name);
+
         this.activeModel.addState(animationName, 1, 1, 1);
         this.playSound(this.getAnimationSound(animationName), 1);
 
@@ -331,6 +336,7 @@ public class EntityModel {
     }
 
     private void playSound(String sound, float vol) {
+        this.manager._debug("Playing sound " + sound + " on " + this.name);
         this.entity.getWorld().playSound(this.entity.getLocation(), sound, vol, 1);
     }
 
