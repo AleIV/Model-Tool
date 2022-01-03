@@ -7,7 +7,7 @@ plugins{
 }
 
 group = 'com.github.AleIV'
-version = '0.9.1-SNAPSHOT'
+version = '1.0-SNAPSHOT'
 
 compileJava{
     options.encoding = 'UTF-8'
@@ -35,7 +35,7 @@ repositories {
 
 dependencies {
     // Paper
-    compileOnly 'com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.12'

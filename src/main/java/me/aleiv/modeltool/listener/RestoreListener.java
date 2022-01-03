@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 
 import java.util.List;
@@ -37,8 +38,8 @@ public class RestoreListener implements Listener {
     }
 
     @EventHandler
-    public void onChunkLoad(ChunkLoadEvent e) {
-        this.manager._debug("Chunk loaded: " + e.getChunk().getX() + ", " + e.getChunk().getZ());
+    public void onChunkLoad(EntitiesLoadEvent e) {
+        this.manager._debug("Chunk where entities were loaded: " + e.getChunk().getX() + ", " + e.getChunk().getZ());
         this.checkEntities(List.of(e.getChunk().getEntities()));
     }
 
