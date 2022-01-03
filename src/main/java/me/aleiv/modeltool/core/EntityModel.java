@@ -67,15 +67,13 @@ public class EntityModel {
         this.disguised = this.entityType == EntityType.PLAYER;
 
         this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.javaPlugin, () -> {
-            if (this.isDead())
-
-                if (this.modeledEntity.isIdle() && RandomUtils.generateInt(1, 3) == 3) {
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> {
-                        if (!this.isDead() && this.modeledEntity.isIdle()) {
-                            this.playSound(this.getAnimationSound("idle"), 1);
-                        }
-                    }, RandomUtils.generateInt(2, 10) * 20L);
-                }
+            if (!this.isDead() && this.modeledEntity.isIdle() && RandomUtils.generateInt(1, 3) == 3) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> {
+                    if (!this.isDead() && this.modeledEntity.isIdle()) {
+                        this.playSound(this.getAnimationSound("idle"), 1);
+                    }
+                }, RandomUtils.generateInt(2, 10) * 20L);
+            }
             if (this.modeledEntity.isWalking()) {
                 this.playSound(this.getAnimationSound("walk"), 1);
             }
