@@ -2,6 +2,7 @@ package me.aleiv.modeltool.listener;
 
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import me.aleiv.modeltool.core.EntityModelManager;
+import me.aleiv.modeltool.exceptions.AlreadyUsedNameException;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -41,7 +42,11 @@ public class RestoreListener implements Listener {
     }
 
     public void checkEntities(List<Entity> entities) {
-        entities.stream().filter(m -> ModelEngineAPI.api.getModelManager().getModeledEntity(m.getUniqueId()) != null).forEach(entity -> Bukkit.getScheduler().runTask(manager.getJavaPlugin(), () -> manager.restoreEntityModel(entity)));
+        entities.stream().filter(m -> ModelEngineAPI.api.getModelManager().getModeledEntity(m.getUniqueId()) != null).forEach(entity -> Bukkit.getScheduler().runTask(manager.getJavaPlugin(), () -> {
+            try {
+                manager.restoreEntityModel(entity);
+            } catch (AlreadyUsedNameException ignore) {}
+        }));
     }
 
     public void unloadWorld(World world) {

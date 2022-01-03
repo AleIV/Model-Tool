@@ -6,6 +6,7 @@ import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import me.aleiv.modeltool.ModelTool;
 import me.aleiv.modeltool.core.EntityModel;
+import me.aleiv.modeltool.exceptions.AlreadyUsedNameException;
 import me.aleiv.modeltool.exceptions.InvalidAnimationException;
 import me.aleiv.modeltool.exceptions.InvalidModelIdException;
 import me.aleiv.modeltool.models.EntityMood;
@@ -64,6 +65,8 @@ public class ModelToolCommand extends BaseCommand {
             player.sendMessage("§aHas spawneado a " + entityModel.getName());
         } catch (InvalidModelIdException e) {
             player.sendMessage("§cModelo invalido");
+        } catch (AlreadyUsedNameException e) {
+            player.sendMessage("§cNombre usado ya");
         }
     }
 

@@ -4,9 +4,11 @@ import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import lombok.Getter;
+import lombok.Setter;
 import me.aleiv.modeltool.events.EntityModelAttackEvent;
 import me.aleiv.modeltool.events.EntityModelDamageEvent;
 import me.aleiv.modeltool.events.EntityModelSpawnEvent;
+import me.aleiv.modeltool.exceptions.AlreadyUsedNameException;
 import me.aleiv.modeltool.exceptions.InvalidAnimationException;
 import me.aleiv.modeltool.exceptions.InvalidModelIdException;
 import me.aleiv.modeltool.listener.JoinQuitListener;
@@ -39,10 +41,14 @@ public class EntityModelManager implements Listener {
     private final HashMap<UUID, EntityModel> entityModelHashMap;
     private final HashMap<String, EntityModel> entityModelNameHashMap;
 
+    @Getter @Setter private boolean debug;
+
     public EntityModelManager(JavaPlugin plugin) {
         this.javaPlugin = plugin;
         this.entityModelHashMap = new HashMap<>();
         this.entityModelNameHashMap = new HashMap<>();
+
+        this.debug = false;
 
         // Registering Listeners
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -79,6 +85,16 @@ public class EntityModelManager implements Listener {
     }
 
     /**
+     * Checks if the name of an entitymodel has already been taken.
+     *
+     * @param name Name of the entitymodel
+     * @return True if the name is taken, false if not
+     */
+    public boolean hasNameBeenTaken(String name) {
+        return entityModelNameHashMap.containsKey(name.toLowerCase());
+    }
+
+    /**
      * Creates and spawns an entity with a model
      *
      * @param name Name that the entity will have
@@ -89,7 +105,11 @@ public class EntityModelManager implements Listener {
      * @return The spawned EntityModel
      * @throws InvalidModelIdException If the modelId is invalid or the model is not found
      */
-    public EntityModel spawnEntityModel(String name, double health, String modelId, Location loc, EntityType entityType, EntityMood entityMood) throws InvalidModelIdException {
+    public EntityModel spawnEntityModel(String name, double health, String modelId, Location loc, EntityType entityType, EntityMood entityMood) throws InvalidModelIdException, AlreadyUsedNameException {
+        if (this.hasNameBeenTaken(name)) {
+            throw new AlreadyUsedNameException(name);
+        }
+
         Entity entity = loc.getWorld().spawnEntity(loc, entityType);
         entity.setCustomName(name);
 
@@ -119,7 +139,11 @@ public class EntityModelManager implements Listener {
      * @param entity The entity to restore.
      * @return The restored EntityModel or null if the entity is not valid.
      */
-    public EntityModel restoreEntityModel(Entity entity) {
+    public EntityModel restoreEntityModel(Entity entity) throws AlreadyUsedNameException {
+        if (this.hasNameBeenTaken(entity.getCustomName())) {
+            throw new AlreadyUsedNameException(entity.getCustomName());
+        }
+
         ModeledEntity modeledEntity = ModelEngineAPI.api.getModelManager().getModeledEntity(entity.getUniqueId());
         if (modeledEntity == null) {
             return null;
@@ -129,6 +153,8 @@ public class EntityModelManager implements Listener {
         if (activeModel == null) {
             return null;
         }
+
+        this._debug("Restoring EntityModel: " + entity.getCustomName());
 
         EntityModel entityModel = new EntityModel(this.javaPlugin, this, entity.getCustomName(), entity, activeModel, modeledEntity, (entity instanceof LivingEntity) ? ((LivingEntity) entity).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : 20, EntityMood.NEUTRAL);
         this.entityModelHashMap.put(entity.getUniqueId(), entityModel);
@@ -257,5 +283,11 @@ public class EntityModelManager implements Listener {
             Bukkit.getPluginManager().callEvent(new EntityModelMoveEvent(entityModel, e.getFrom(), e.getTo()));
         }
     }*/
+
+    public void _debug(String message) {
+        if (this.debug) {
+            Bukkit.getLogger().info(message);
+        }
+    }
 
 }
