@@ -1,7 +1,6 @@
 package me.aleiv.modeltool.listener;
 
 import com.ticxo.modelengine.api.ModelEngineAPI;
-import me.aleiv.modeltool.core.EntityModel;
 import me.aleiv.modeltool.core.EntityModelManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -58,7 +57,7 @@ public class WorldListener implements Listener {
     public void unloadWorld(World world) {
         world.getEntities().stream().map(m -> manager.getEntityModel(m.getUniqueId())).filter(Objects::nonNull).forEach(m -> {
             if (m.isDying()) {
-                m.forceKill();
+                m.remove();
                 return;
             }
 

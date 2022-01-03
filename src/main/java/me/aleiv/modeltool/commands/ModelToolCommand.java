@@ -93,12 +93,12 @@ public class ModelToolCommand extends BaseCommand {
         sender.sendMessage("§aHas matado a " + entityModel.getName());
     }
 
-    @Subcommand("forcekill")
+    @Subcommand("remove")
     @CommandCompletion("@entitymodels")
     @Syntax("<EntityModelName>")
-    public void onForcekill(CommandSender sender, EntityModel entityModel) {
-        entityModel.forceKill();
-        sender.sendMessage("§aHas matado a " + entityModel.getName());
+    public void onRemove(CommandSender sender, EntityModel entityModel) {
+        entityModel.remove();
+        sender.sendMessage("§aHas removido a " + entityModel.getName());
     }
 
     @Subcommand("playanim")

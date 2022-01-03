@@ -106,7 +106,7 @@ public class EntityModel {
 
         Animation deathAnimation = this.getAnimation("death");
         if (deathAnimation == null) {
-            this.forceKill();
+            this.remove();
             return;
         }
 
@@ -114,7 +114,7 @@ public class EntityModel {
 
         this.activeModel.addState("death", 0, 0, 1);
         Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> {
-            this.forceKill();
+            this.remove();
             // TODO: Add some die particles?
             Bukkit.getPluginManager().callEvent(new EntityModelDeathEvent(this, killer));
         }, frames);
@@ -123,7 +123,7 @@ public class EntityModel {
     /**
      * Will remove the entity and the model without any animation
      */
-    public void forceKill() {
+    public void remove() {
         if (!this.disguised) {
             this.entity.remove();
         } else {
