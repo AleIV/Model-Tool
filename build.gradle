@@ -96,7 +96,7 @@ publishing {
     }
     repositories {
         maven {
-            url 'http://repo.dolphln.com/artifactory/public/'
+            url 'http://repo.k8s.dolphln.com/artifactory/public-gradle/'
             allowInsecureProtocol true
             credentials {
                 username dolphlnrepoUser
