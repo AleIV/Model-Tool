@@ -8,6 +8,7 @@ import lombok.Getter;
 import me.aleiv.modeltool.exceptions.InvalidAnimationException;
 import me.aleiv.modeltool.models.EntityMood;
 import me.aleiv.modeltool.events.*;
+import me.aleiv.modeltool.utilities.RandomUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -42,6 +43,7 @@ public class EntityModel {
     @Getter private Entity entity;
     @Getter private final ActiveModel activeModel;
     @Getter private ModeledEntity modeledEntity;
+    private int taskId;
 
     public EntityModel(JavaPlugin javaPlugin, EntityModelManager manager, String name, Entity entity, ActiveModel activeModel, ModeledEntity modeledEntity, double maxHealth, EntityMood mood) {
         this.javaPlugin = javaPlugin;
@@ -63,6 +65,21 @@ public class EntityModel {
 
         this.dying = false;
         this.disguised = this.entityType == EntityType.PLAYER;
+
+        this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.javaPlugin, () -> {
+            if (this.isDead())
+
+                if (this.modeledEntity.isIdle() && RandomUtils.generateInt(1, 3) == 3) {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> {
+                        if (!this.isDead() && this.modeledEntity.isIdle()) {
+                            this.playSound(this.getAnimationSound("idle"), 1);
+                        }
+                    }, RandomUtils.generateInt(2, 10) * 20L);
+                }
+            if (this.modeledEntity.isWalking()) {
+                this.playSound(this.getAnimationSound("walk"), 1);
+            }
+        }, 0L, 20L);
     }
 
     public void teleport(Location location) {
@@ -127,6 +144,7 @@ public class EntityModel {
         }
         this.activeModel.clearModel();
         this.manager._removeModel(this.uuid);
+        Bukkit.getScheduler().cancelTask(this.taskId);
         Bukkit.getPluginManager().callEvent(new EntityModelRemoveEvent(this));
     }
 
@@ -302,6 +320,10 @@ public class EntityModel {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> this.activeModel.removeState(animationName, false), animation.getLength());
         return animation.getLength();
+    }
+
+    public boolean isDead() {
+        return this.dying || this.entity.isDead();
     }
 
     private String getAnimationSound(String animationName) {
