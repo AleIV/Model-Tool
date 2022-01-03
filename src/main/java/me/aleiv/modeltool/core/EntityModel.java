@@ -127,7 +127,7 @@ public class EntityModel {
         }
         this.activeModel.clearModel();
         this.manager._removeModel(this.uuid);
-        Bukkit.getPluginManager().callEvent(new EntityModelForceDeathEvent(this));
+        Bukkit.getPluginManager().callEvent(new EntityModelRemoveEvent(this));
     }
 
     /**

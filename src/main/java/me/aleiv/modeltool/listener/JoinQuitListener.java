@@ -1,9 +1,8 @@
 package me.aleiv.modeltool.listener;
 
-import me.aleiv.modeltool.ModelTool;
 import me.aleiv.modeltool.core.EntityModel;
 import me.aleiv.modeltool.core.EntityModelManager;
-import me.aleiv.modeltool.events.EntityModelForceDeathEvent;
+import me.aleiv.modeltool.events.EntityModelRemoveEvent;
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -49,7 +48,7 @@ public class JoinQuitListener implements Listener {
     }
 
     @EventHandler
-    public void onEntityModelForceKill(EntityModelForceDeathEvent e) {
+    public void onEntityModelForceKill(EntityModelRemoveEvent e) {
         if (this.playerCache.containsValue(e.getEntityModel())) {
             // Remove the player from the cache
             for (UUID uuid : this.playerCache.keySet()) {
