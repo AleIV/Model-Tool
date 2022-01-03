@@ -36,10 +36,12 @@ public class EntityModelManager implements Listener {
 
     @Getter private final JavaPlugin javaPlugin;
     private final HashMap<UUID, EntityModel> entityModelHashMap;
+    private final HashMap<String, EntityModel> entityModelNameHashMap;
 
     public EntityModelManager(JavaPlugin plugin) {
         this.javaPlugin = plugin;
         this.entityModelHashMap = new HashMap<>();
+        this.entityModelNameHashMap = new HashMap<>();
 
         // Registering Listeners
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -65,7 +67,7 @@ public class EntityModelManager implements Listener {
      * @return The EntityModel of the entity or null if no matches are found
      */
     public EntityModel getEntityModel(String entityModelName) {
-        return entityModelHashMap.values().stream().filter(entityModel -> entityModel.getName().equalsIgnoreCase(entityModelName)).findFirst().orElse(null);
+        return entityModelNameHashMap.get(entityModelName.toLowerCase());
     }
 
     /**
@@ -103,6 +105,7 @@ public class EntityModelManager implements Listener {
         EntityModel entityModel = new EntityModel(this.javaPlugin, this, name, entity, activeModel, modeledEntity, health, entityMood);
 
         this.entityModelHashMap.put(entity.getUniqueId(), entityModel);
+        this.entityModelNameHashMap.put(name.toLowerCase(), entityModel);
 
         Bukkit.getPluginManager().callEvent(new EntityModelSpawnEvent(entityModel));
 
@@ -128,6 +131,7 @@ public class EntityModelManager implements Listener {
 
         EntityModel entityModel = new EntityModel(this.javaPlugin, this, entity.getCustomName(), entity, activeModel, modeledEntity, (entity instanceof LivingEntity) ? ((LivingEntity) entity).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : 20, EntityMood.NEUTRAL);
         this.entityModelHashMap.put(entity.getUniqueId(), entityModel);
+        this.entityModelNameHashMap.put(entityModel.getName(), entityModel);
 
         return entityModel;
     }
