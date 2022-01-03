@@ -38,11 +38,14 @@ public class RestoreListener implements Listener {
 
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent e) {
+        this.manager._debug("Chunk loaded: " + e.getChunk().getX() + ", " + e.getChunk().getZ());
         this.checkEntities(List.of(e.getChunk().getEntities()));
     }
 
     public void checkEntities(List<Entity> entities) {
+        this.manager._debug("Checking the following entities (" + entities.size() + "): " + entities.toString());
         entities.stream().filter(m -> ModelEngineAPI.api.getModelManager().getModeledEntity(m.getUniqueId()) != null).forEach(entity -> Bukkit.getScheduler().runTask(manager.getJavaPlugin(), () -> {
+            this.manager._debug("Entity found: " + entity.getUniqueId());
             try {
                 manager.restoreEntityModel(entity);
             } catch (AlreadyUsedNameException ignore) {}
