@@ -15,11 +15,11 @@ import org.bukkit.event.world.WorldUnloadEvent;
 import java.util.List;
 import java.util.Objects;
 
-public class WorldListener implements Listener {
+public class RestoreListener implements Listener {
 
     private final EntityModelManager manager;
 
-    public WorldListener(EntityModelManager manager) {
+    public RestoreListener(EntityModelManager manager) {
         this.manager = manager;
     }
 
