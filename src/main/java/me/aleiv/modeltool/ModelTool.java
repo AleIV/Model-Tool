@@ -5,16 +5,11 @@ import com.ticxo.modelengine.api.ModelEngineAPI;
 import me.aleiv.modeltool.commands.ModelToolCommand;
 import me.aleiv.modeltool.core.EntityModel;
 import me.aleiv.modeltool.core.EntityModelManager;
-import me.aleiv.modeltool.listener.JoinQuitListener;
-import me.aleiv.modeltool.listener.MountUnmountListener;
-import me.aleiv.modeltool.listener.PlayerDieListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import co.aikar.commands.PaperCommandManager;
 import kr.entree.spigradle.annotations.SpigotPlugin;
 import lombok.Getter;
-import me.aleiv.modeltool.utilities.NegativeSpaces;
-import me.aleiv.modeltool.utilities.TCT.BukkitTCT;
 
 @SpigotPlugin
 public class ModelTool extends JavaPlugin {
@@ -27,9 +22,6 @@ public class ModelTool extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-
-        BukkitTCT.registerPlugin(this);
-        NegativeSpaces.registerCodes();
 
         this.entityModelManager = new EntityModelManager(this);
 
