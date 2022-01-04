@@ -13,7 +13,6 @@ import me.aleiv.modeltool.exceptions.InvalidAnimationException;
 import me.aleiv.modeltool.exceptions.InvalidModelIdException;
 import me.aleiv.modeltool.listener.JoinQuitListener;
 import me.aleiv.modeltool.listener.MountUnmountListener;
-import me.aleiv.modeltool.listener.PlayerDieListener;
 import me.aleiv.modeltool.listener.RestoreListener;
 import me.aleiv.modeltool.models.EntityMood;
 import org.bukkit.Bukkit;
@@ -53,7 +52,6 @@ public class EntityModelManager implements Listener {
         // Registering Listeners
         Bukkit.getPluginManager().registerEvents(this, plugin);
         Bukkit.getPluginManager().registerEvents(new JoinQuitListener(this), plugin);
-        Bukkit.getPluginManager().registerEvents(new PlayerDieListener(this), plugin);
         Bukkit.getPluginManager().registerEvents(new MountUnmountListener(this), plugin);
         Bukkit.getPluginManager().registerEvents(new RestoreListener(this), plugin);
     }
