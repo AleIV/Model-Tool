@@ -30,12 +30,15 @@ repositories {
     maven { url 'https://jitpack.io' }
     maven { url 'https://repo.aikar.co/content/groups/aikar/' }
     maven { url 'https://mvn.lumine.io/repository/maven-public/' }
+    maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"}
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url "https://oss.sonatype.org/content/repositories/central"}
 }
 
 
 dependencies {
     // Paper
-    compileOnly 'io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.12'

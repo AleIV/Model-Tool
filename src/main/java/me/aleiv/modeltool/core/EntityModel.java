@@ -58,7 +58,6 @@ public class EntityModel {
         this.modeledEntity = modeledEntity;
 
         if (entity instanceof LivingEntity livingEntity) {
-            livingEntity.registerAttribute(Attribute.GENERIC_MAX_HEALTH);
             livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
         }
         this.mood = mood;

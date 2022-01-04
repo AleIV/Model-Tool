@@ -11,7 +11,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 
 import java.util.List;
@@ -38,8 +37,8 @@ public class RestoreListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onChunkLoad(EntitiesLoadEvent e) {
-        // TODO: There's an issue on ModelEngine. Waiting for a fix.
+    public void onChunkLoad(ChunkLoadEvent e) {
+        // TODO: Only works on 1.16. Needs to be fixed for upper versions.
         Bukkit.getScheduler().scheduleSyncDelayedTask(this.manager.getJavaPlugin(), () -> this.checkEntities(List.of(e.getChunk().getEntities())), 2L);
     }
 
