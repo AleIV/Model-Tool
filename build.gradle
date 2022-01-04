@@ -97,7 +97,7 @@ publishing {
             artifact javadocJar
         }
     }
-    repositories {
+/*    repositories {
         maven {
             url 'http://repo.k8s.dolphln.com/artifactory/public-gradle/'
             allowInsecureProtocol true
@@ -106,7 +106,7 @@ publishing {
                 password dolphlnrepoPass
             }
         }
-    }
+    }*/
 }
 
 tasks.build.dependsOn tasks.shadowJar
