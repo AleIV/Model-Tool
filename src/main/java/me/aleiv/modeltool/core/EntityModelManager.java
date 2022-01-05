@@ -60,9 +60,9 @@ public class EntityModelManager implements Listener {
 
         this.restorerTaskId = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
             Bukkit.getWorlds().forEach(world -> world.getEntities().stream()
+                    .filter(entity -> entity.getType() != EntityType.PLAYER && entity instanceof LivingEntity && !this.entityModelHashMap.containsKey(entity.getUniqueId()))
                     .map(e -> ModelEngineAPI.api.getModelManager().getModeledEntity(e.getUniqueId()))
                     .filter(Objects::nonNull)
-                    .filter(me -> !this.entityModelHashMap.containsKey(me.getEntity().getUniqueId()))
                     .forEach(me -> {
                             try {
                                 this.restoreEntityModel(me);
@@ -157,8 +157,9 @@ public class EntityModelManager implements Listener {
     public EntityModel restoreEntityModel(ModeledEntity modeledEntity) throws AlreadyUsedNameException {
         Entity entity = Bukkit.getEntity(modeledEntity.getEntity().getUniqueId());
         if (entity == null) return null;
+        String name = entity.getCustomName() == null ? entity.getName() : entity.getCustomName();
 
-        if (this.hasNameBeenTaken(entity.getCustomName())) {
+        if (this.hasNameBeenTaken(name)) {
             throw new AlreadyUsedNameException(entity.getCustomName());
         }
 
@@ -169,7 +170,7 @@ public class EntityModelManager implements Listener {
 
         this._debug("Restoring EntityModel: " + entity.getCustomName());
 
-        EntityModel entityModel = new EntityModel(this.javaPlugin, this, entity.getCustomName(), entity, activeModel, modeledEntity, (entity instanceof LivingEntity) ? ((LivingEntity) entity).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : 20, EntityMood.NEUTRAL);
+        EntityModel entityModel = new EntityModel(this.javaPlugin, this, name, entity, activeModel, modeledEntity, (entity instanceof LivingEntity) ? ((LivingEntity) entity).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : 20, EntityMood.NEUTRAL);
         this.entityModelHashMap.put(entity.getUniqueId(), entityModel);
         this.entityModelNameHashMap.put(entityModel.getName().toLowerCase(), entityModel);
 
