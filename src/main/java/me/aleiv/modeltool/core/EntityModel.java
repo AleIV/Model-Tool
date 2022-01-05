@@ -65,18 +65,20 @@ public class EntityModel {
         this.dying = false;
         this.disguised = this.entityType == EntityType.PLAYER;
 
+        // In seconds
+        int walkInterval = 1;
+
         this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.javaPlugin, () -> {
-            if (!this.isDead() && this.modeledEntity.isIdle() && RandomUtils.generateInt(1, 3) == 3) {
+            if (this.modeledEntity.isWalking()) {
+                this.playSound(this.getAnimationSound("walk"), 1);
+            } else if (!this.isDead() && RandomUtils.generateInt(1, 2) == 3) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> {
                     if (!this.isDead() && this.modeledEntity.isIdle()) {
                         this.playSound(this.getAnimationSound("idle"), 1);
                     }
                 }, RandomUtils.generateInt(2, 10) * 20L);
             }
-            if (this.modeledEntity.isWalking()) {
-                this.playSound(this.getAnimationSound("walk"), 1);
-            }
-        }, 0L, 20L);
+        }, 0L, walkInterval*20L);
     }
 
     public void teleport(Location location) {
