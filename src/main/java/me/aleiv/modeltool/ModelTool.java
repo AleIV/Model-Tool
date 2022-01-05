@@ -24,6 +24,7 @@ public class ModelTool extends JavaPlugin {
         instance = this;
 
         this.entityModelManager = new EntityModelManager(this);
+        this.entityModelManager.setDebug(true);
 
         this.registerCommands();
     }

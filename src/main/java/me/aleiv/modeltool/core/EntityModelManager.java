@@ -31,6 +31,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -39,6 +40,8 @@ public class EntityModelManager implements Listener {
     @Getter private final JavaPlugin javaPlugin;
     private final HashMap<UUID, EntityModel> entityModelHashMap;
     private final HashMap<String, EntityModel> entityModelNameHashMap;
+
+    private int restorerTaskId;
 
     @Getter @Setter private boolean debug;
 
@@ -54,6 +57,20 @@ public class EntityModelManager implements Listener {
         Bukkit.getPluginManager().registerEvents(new JoinQuitListener(this), plugin);
         Bukkit.getPluginManager().registerEvents(new MountUnmountListener(this), plugin);
         Bukkit.getPluginManager().registerEvents(new RestoreListener(this), plugin);
+
+        this.restorerTaskId = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+            Bukkit.getWorlds().forEach(world -> world.getEntities().stream()
+                    .map(e -> ModelEngineAPI.api.getModelManager().getModeledEntity(e.getUniqueId()))
+                    .filter(Objects::nonNull)
+                    .filter(me -> !this.entityModelHashMap.containsKey(me.getEntity().getUniqueId()))
+                    .forEach(me -> {
+                            try {
+                                this.restoreEntityModel(me);
+                            } catch (AlreadyUsedNameException ignore) {}
+                        }
+                    )
+            );
+        }, 5*20L, 5*20L).getTaskId();
     }
 
     /**
@@ -134,17 +151,15 @@ public class EntityModelManager implements Listener {
     /**
      * If the entity is valid, it will be restored to an EntityModel.
      *
-     * @param entity The entity to restore.
+     * @param modeledEntity The modeledEntity to restore.
      * @return The restored EntityModel or null if the entity is not valid.
      */
-    public EntityModel restoreEntityModel(Entity entity) throws AlreadyUsedNameException {
+    public EntityModel restoreEntityModel(ModeledEntity modeledEntity) throws AlreadyUsedNameException {
+        Entity entity = Bukkit.getEntity(modeledEntity.getEntity().getUniqueId());
+        if (entity == null) return null;
+
         if (this.hasNameBeenTaken(entity.getCustomName())) {
             throw new AlreadyUsedNameException(entity.getCustomName());
-        }
-
-        ModeledEntity modeledEntity = ModelEngineAPI.api.getModelManager().getModeledEntity(entity.getUniqueId());
-        if (modeledEntity == null) {
-            return null;
         }
 
         ActiveModel activeModel = modeledEntity.getAllActiveModel().values().stream().filter(am -> am.getModelId() != null && !am.getModelId().equals("")).findFirst().orElse(null);
@@ -156,7 +171,7 @@ public class EntityModelManager implements Listener {
 
         EntityModel entityModel = new EntityModel(this.javaPlugin, this, entity.getCustomName(), entity, activeModel, modeledEntity, (entity instanceof LivingEntity) ? ((LivingEntity) entity).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : 20, EntityMood.NEUTRAL);
         this.entityModelHashMap.put(entity.getUniqueId(), entityModel);
-        this.entityModelNameHashMap.put(entityModel.getName(), entityModel);
+        this.entityModelNameHashMap.put(entityModel.getName().toLowerCase(), entityModel);
 
         return entityModel;
     }

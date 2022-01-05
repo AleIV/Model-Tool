@@ -31,25 +31,25 @@ public class RestoreListener implements Listener {
         this.unloadWorld(e.getWorld());
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onDisable(PluginDisableEvent e) {
         Bukkit.getWorlds().forEach(this::unloadWorld);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    /*@EventHandler(priority = EventPriority.LOWEST)
     public void onChunkLoad(ChunkLoadEvent e) {
-        // TODO: Only works on 1.16. Needs to be fixed for upper versions.
         Bukkit.getScheduler().scheduleSyncDelayedTask(this.manager.getJavaPlugin(), () -> this.checkEntities(List.of(e.getChunk().getEntities())), 2L);
     }
 
     public void checkEntities(List<Entity> entities) {
-        entities.stream().filter(m -> ModelEngineAPI.api.getModelManager().getModeledEntity(m.getUniqueId()) != null).forEach(entity -> Bukkit.getScheduler().runTask(manager.getJavaPlugin(), () -> {
-            this.manager._debug("Entity found: " + entity.getUniqueId());
+        entities.stream().map(m -> ModelEngineAPI.api.getModelManager().restoreModeledEntity(m)).filter(Objects::nonNull).forEach(entity -> Bukkit.getScheduler().runTask(manager.getJavaPlugin(), () -> {
+            this.manager._debug("Entity found: " + entity.getEntity().getUniqueId());
+            entity.detectPlayers();
             try {
                 manager.restoreEntityModel(entity);
             } catch (AlreadyUsedNameException ignore) {}
         }));
-    }
+    }*/
 
     public void unloadWorld(World world) {
         world.getEntities().stream().map(m -> manager.getEntityModel(m.getUniqueId())).filter(Objects::nonNull).forEach(m -> {
