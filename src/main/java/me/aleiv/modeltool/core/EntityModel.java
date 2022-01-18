@@ -333,7 +333,7 @@ public class EntityModel {
         this.manager._debug("Playing animation " + animationName + " on " + this.name);
 
         if (this.oldState != null) {
-            this.activeModel.removeState(animationName, false);
+            this.activeModel.removeState(this.oldState, false);
             this.oldState = null;
         }
 
