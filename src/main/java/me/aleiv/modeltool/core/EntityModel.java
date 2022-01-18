@@ -45,6 +45,8 @@ public class EntityModel {
     @Getter private ModeledEntity modeledEntity;
     private int taskId;
 
+    private String oldState = null;
+
     public EntityModel(JavaPlugin javaPlugin, EntityModelManager manager, String name, Entity entity, ActiveModel activeModel, ModeledEntity modeledEntity, double maxHealth, EntityMood mood) {
         this.javaPlugin = javaPlugin;
         this.manager = manager;
@@ -311,6 +313,17 @@ public class EntityModel {
      * @return Length of the animation
      */
     public int playAnimation(String animationName) throws InvalidAnimationException {
+        return this.playAnimation(animationName, false);
+    }
+
+    /**
+     * Plays an animation
+     *
+     * @param animationName Name of the animation
+     * @param loop If loop is true, the animation will loop
+     * @return Length of the animation
+     */
+    public int playAnimation(String animationName, boolean loop) throws InvalidAnimationException {
         Animation animation = getAnimation(animationName);
 
         if (animation == null) {
@@ -319,10 +332,19 @@ public class EntityModel {
 
         this.manager._debug("Playing animation " + animationName + " on " + this.name);
 
+        if (this.oldState != null) {
+            this.activeModel.removeState(animationName, false);
+            this.oldState = null;
+        }
+
         this.activeModel.addState(animationName, 1, 1, 1);
         this.playSound(this.getAnimationSound(animationName), 1);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> this.activeModel.removeState(animationName, false), animation.getLength());
+        if (loop) {
+            this.oldState = animationName;
+        } else {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> this.activeModel.removeState(animationName, false), animation.getLength());
+        }
         return animation.getLength();
     }
 
