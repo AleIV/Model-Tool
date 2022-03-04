@@ -1,7 +1,7 @@
 package me.aleiv.modeltool.core;
 
 import com.ticxo.modelengine.api.ModelEngineAPI;
-import com.ticxo.modelengine.api.generator.blueprint.Animation;
+import com.ticxo.modelengine.api.generator.blueprint.BlueprintAnimation;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import lombok.Getter;
@@ -292,7 +292,7 @@ public class EntityModel {
      * @param animationName Name of the animation
      * @return Animation, or null if not found or doesn't exist
      */
-    public Animation getAnimation(String animationName) {
+    public BlueprintAnimation getAnimation(String animationName) {
         return this.activeModel.getBlueprint().getAnimation(animationName);
     }
 
@@ -324,7 +324,7 @@ public class EntityModel {
      * @return Length of the animation
      */
     public int playAnimation(String animationName, boolean loop) throws InvalidAnimationException {
-        Animation animation = getAnimation(animationName);
+        BlueprintAnimation animation = getAnimation(animationName);
 
         if (animation == null) {
             throw new InvalidAnimationException(this.activeModel.getModelId(), animationName);
@@ -332,20 +332,22 @@ public class EntityModel {
 
         this.manager._debug("Playing animation " + animationName + " on " + this.name);
 
-        if (this.oldState != null) {
-            this.activeModel.removeState(this.oldState, false);
-            this.oldState = null;
-        }
+        stopAnimation();
 
         this.activeModel.addState(animationName, 1, 1, 1);
         this.playSound(this.getAnimationSound(animationName), 1);
 
-        if (loop) {
-            this.oldState = animationName;
-        } else {
+        this.oldState = animationName;
+
+        if (!loop) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(this.javaPlugin, () -> this.activeModel.removeState(animationName, false), animation.getLength());
         }
         return animation.getLength();
+    }
+
+    public void stopAnimation() {
+        this.activeModel.removeState(this.oldState, false);
+        this.oldState = null;
     }
 
     public boolean isDead() {
