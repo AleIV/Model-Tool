@@ -350,6 +350,30 @@ public class EntityModel {
         this.oldState = null;
     }
 
+    /**
+     * Make the disguised player see the model.
+     *
+     * @param seeSelf
+     */
+    public void setSeeSelf(boolean seeSelf) {
+        if (!this.disguised) return;
+
+        if (seeSelf) {
+            this.modeledEntity.addPlayerAsync((Player) this.entity);
+        } else {
+            this.modeledEntity.removePlayerAsync((Player) this.entity);
+        }
+    }
+
+    /**
+     * Make the entity inside be invisible.
+     *
+     * @param invisible
+     */
+    public void setInvisible(boolean invisible) {
+        this.modeledEntity.setInvisible(invisible);
+    }
+
     public boolean isDead() {
         return this.dying || this.entity.isDead();
     }
