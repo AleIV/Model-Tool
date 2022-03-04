@@ -47,10 +47,10 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 
     // ACF
-    implementation 'co.aikar:acf-paper:0.5.0-SNAPSHOT'
+    implementation 'co.aikar:acf-paper:0.5.1-SNAPSHOT'
 
     // Model Engine
-    compileOnly 'com.ticxo.modelengine:api:R2.2.0'
+    compileOnly 'com.ticxo.modelengine:api:R2.4.0'
 
 }
 
