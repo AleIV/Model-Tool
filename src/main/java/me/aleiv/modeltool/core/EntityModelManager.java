@@ -58,7 +58,7 @@ public class EntityModelManager implements Listener {
         Bukkit.getPluginManager().registerEvents(new MountUnmountListener(this), plugin);
         Bukkit.getPluginManager().registerEvents(new RestoreListener(this), plugin);
 
-        this.restorerTaskId = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+        this.restorerTaskId = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             Bukkit.getWorlds().forEach(world -> world.getEntities().stream()
                     .filter(entity -> entity.getType() != EntityType.PLAYER && entity instanceof LivingEntity && !this.entityModelHashMap.containsKey(entity.getUniqueId()))
                     .map(e -> ModelEngineAPI.api.getModelManager().getModeledEntity(e.getUniqueId()))
